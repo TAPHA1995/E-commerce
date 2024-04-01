@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CardController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -11,3 +12,5 @@ Route::get('/', [ProductController::class, 'index']);
 //Affichage détail des produits
 Route::get('/produitShow/{id}', [ProductController::class, 'show']);
 
+//Ajouter à la card
+Route::post('/panier/ajouter', [CardController::class, 'store'])->name('card.store');
