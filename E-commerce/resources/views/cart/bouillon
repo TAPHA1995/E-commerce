@@ -1,0 +1,8 @@
+
+                     {{-- @if(Auth::user()->formation == 'Développement web fullstack PHP')
+                     <div>
+                         <a href="/index_uapprenant" class="Package">
+                             <div class=" formation">Dévelopement web  fullstack php</div>
+                         </a>
+                     </div>
+                     @endif --}}

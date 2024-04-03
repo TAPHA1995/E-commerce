@@ -9,8 +9,13 @@ class Product extends Model
 {
    public function getPrice()
    {
-     $price = $this->price / 100;
+     $price = $this->price;
 
      return number_format($price, 2, ',', ' ');
    }
+   protected $filiable=[
+
+    'titre', 'slug', 'subtitle', 'description', 'price','image'
+
+];
 }

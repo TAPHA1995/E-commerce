@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Auth\Middleware\RedirectIfAuthenticated;
+use Illuminate\Foundation\Http\Middleware\TrimStrings;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +21,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // TrimStrings::except(['secret']);
+        // RedirectIfAuthenticated::redirectUsing(fn ($request)=> route('produit.index'));
     }
 }

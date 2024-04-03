@@ -10,10 +10,7 @@
          <p><strong>{{$product->price}} Cfa</strong></p>
          <form action="{{ route('card.store')}}" method="POST">
             @csrf
-            <input type="hidden" name="id" value="{{$product->id}}">
-            <input type="hidden" name="titre" value="{{$product->titre}}">
-            <input type="hidden" name="price" value="{{$product->price}}">
-            <input type="hidden" name="image" value="{{$product->image}}">
+            <input type="hidden" name="product_id" value="{{$product->id}}">
             <button type="submit" class="btn btn-success">Ajouter au panier</button>
          </form>
       </div>
