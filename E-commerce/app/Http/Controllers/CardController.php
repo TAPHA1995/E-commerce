@@ -8,8 +8,6 @@ use Illuminate\Http\Request;
 
 class CardController extends Controller
 {
-
-
     public function index()
     {
         $cartItems = Cart::instance('cart.index')->content();
@@ -19,7 +17,7 @@ class CardController extends Controller
     public function addCart(Request $request)
     {
 
-        $duplicat = Cart::instance('cart.index')->content();
+        // $duplicat = Cart::instance('cart.index')->content();
 
         // $duplicat->search(function ($cartItem, $rowId) {
         //     return $cartItem->id === 1;
@@ -36,17 +34,12 @@ class CardController extends Controller
             use($request) {
                 return $cartItem->id == $request->product_id;
             });
-        if ( $request->product_id ===1) {
+        if ( $request->product_id === 1) {
             return redirect('/')->with('success', 'Le produit a déjà été ajouté.');
         }
-        Cart::instance('cart.index')->add($product->id, $product->titre, 1, $product->price)->associate('App\Models\Product');
+        Cart::instance('cart.index')->add($product->id, $product->titre, 1, $product->regular_price,['$product' => 'sale_pric'])->associate('App\Models\Product');
         return redirect('/')->with('success', 'Le produit a bien été ajouté.');
     }
-
-
-
-
-
 
     // public function store(Request $request)
     // {

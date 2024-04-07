@@ -1,8 +1,64 @@
+<?php
 
-                     {{-- @if(Auth::user()->formation == 'Développement web fullstack PHP')
-                     <div>
-                         <a href="/index_uapprenant" class="Package">
-                             <div class=" formation">Dévelopement web  fullstack php</div>
-                         </a>
-                     </div>
-                     @endif --}}
+namespace App\Http\Controllers;
+
+use App\Models\Product;
+use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Str;
+
+class ProductController extends Controller
+{
+    public function index()
+    {
+        // $product= Product::orderBy('created_at', 'desc')->paginate(12);
+        // return view('produit.index',['product' => $product]);
+
+        $product = Product::paginate(10);
+
+        // Utilisez withQueryString() pour conserver tous les paramètres de la requête dans les liens de pagination
+        $product->withQueryString();
+
+        return view('produit.index', compact('product'));
+    }
+
+    public function show($slug)
+    {
+     
+     $product = Product::where('slug', $slug)->first();
+     return view('produit.show')->with('product', $product);
+    }
+
+
+
+
+}
+
+
+
+
+@extends('layouts.master')
+@section('content')
+    @foreach ($product as $products)
+    <div class="col-md-6">
+        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+        <div class="col p-4 d-flex flex-column position-static">
+            <strong class="d-inline-block mb-2 text-success">{{$products->titre}}</strong>
+            <h5 class="mb-0">{{$products->titre}}</h5>
+            <div class="mb-1 text-muted">{{$products->created_at->format('d/m/Y')}}</div>
+            <p class="mb-auto">{{$products->subtitle}}.</p>
+            <p class="mb-auto">{{$products->category->titre}}.</p>
+            <p><strong>{{$products->getPrice()}} Cfa</strong></p>
+            <a href="{{route('product.show', $product->slug)}}" class="stretched-link btn btn-success">voir</a>
+        </div>
+        <div class="col-auto d-none d-lg-block">
+            <img src="assets/image_produit/{{$products->image}}" alt="">
+        </div>
+        </div>
+    </div>
+    @endforeach
+    <div>
+        {{ $product->links() }}
+    </div>
+@endsection

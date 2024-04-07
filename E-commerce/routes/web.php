@@ -14,7 +14,7 @@ Auth::routes();
 //Affichage page d'accueil
 Route::get('/', [ProductController::class, 'index'])->name('produit.index');
 //Affichage détail des produits
-Route::get('/produitShow/{id}', [ProductController::class, 'show']);
+Route::get('/produitShow/{slug}', [ProductController::class, 'show'])->name('product.show');
 
 //Ajouter à la card
 Route::post('/panier/ajouter', [CardController::class, 'addCart'])->name('card.store');

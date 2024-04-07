@@ -50,15 +50,15 @@ border-bottom-right-radius: 16px;
                   <div class="p-5">
                     <div class="d-flex justify-content-between align-items-center mb-5">
                       <h1 class="fw-bold mb-0 text-black">Shopping Cart</h1>
-                      <h6 class="mb-0 text-muted">3 items</h6>
+                      <h6 class="mb-0 text-muted">{{ Cart::instance('cart.index')->content()->count() }} article @if (Cart::instance('cart.index')->content()->count() > 1) <span style="margin-left:-3px">s</span> @endif</h6>
                     </div>
                     @if (Cart::count() > 0)
-                    <hr class="my-4">
                     @foreach (Cart::content() as $product)
+                    <hr class="my-4">
                     <div class="row mb-4 d-flex justify-content-between align-items-center">
                       <div class="col-md-2 col-lg-2 col-xl-2">
                         <img
-                          src="{{$product->model->image}}"
+                        src="assets/image_produit/{{$product->model->image}}"
                           class="img-fluid rounded-3" alt="Cotton T-shirt">
                       </div>
                       <div class="col-md-3 col-lg-3 col-xl-3">
@@ -78,7 +78,13 @@ border-bottom-right-radius: 16px;
                         </button>
                       </div>
                       <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                        <h6 class="mb-0">{{$product->model->getPrice()}}</h6>
+                       @if ($product->model->sale_price)
+                        <p><strong>{{$product->model->sale_price}} Cfa</strong></p>
+                        <del>{{$product->model->regular_price}}</del>
+                        <span>{{round((($product->model->regular_price - $product->model->sale_price)/$product->model->regular_price)*100)}}% de réduction</span> 
+                      @else
+                        <p><strong>{{$product->model->regular_price}} Cfa</strong></p>
+                      @endif
                       </div>
                       <div class="col-md-1 col-lg-1 col-xl-1 text-end">
                         <a href="#!" class="text-muted"><i class="fas fa-times"></i></a>

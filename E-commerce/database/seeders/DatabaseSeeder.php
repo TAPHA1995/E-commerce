@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Product;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -20,7 +23,8 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
         $this->call(ProductTableSeeder::class);
+        Brand::factory(6)->create();
+        Category::factory(6)->create();
+
     }
-
-
 }

@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="fr">
   <head>
@@ -36,6 +35,9 @@
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     <style>
+        nav svg{
+            height: 20px;
+        }
       .bd-placeholder-img {
         font-size: 1.125rem;
         text-anchor: middle;
@@ -49,10 +51,6 @@
           font-size: 3.5rem;
         }
       }
-
-
-            /* stylelint-disable selector-list-comma-newline-after */
-
         .blog-header {
         line-height: 1;
         border-bottom: 1px solid #e5e5e5;
@@ -182,6 +180,17 @@
                 </ul>
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ms-auto" style="display: flex; align-items:center">
+                  <li class="nav-item">
+                    <a class="nav-link" href="{{ url('') }}" style="font-weight:bold; font-size:15px">A propos</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{{ url('') }}" style="font-weight:bold; font-size:15px">Contact</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{{ url('') }}" style="font-weight:bold; font-size:15px">Blog</a>
+                  </li>
+
+                  |
                     <!-- Authentication Links -->
                     @if (Auth::user())
                         @if(Auth::user()->userType == 'Admin')
@@ -204,10 +213,10 @@
                         @endif
                     @else
                         <li class="nav-item dropdown " style="display: flex; gap:10px;" >
-                            <div>
+                            <div style="margin-left: 10px">
                                 {{ Auth::user()->nom }}
                             </div>
-                            |
+                            -
                                 <div>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                     onclick="event.preventDefault();
@@ -252,10 +261,10 @@
       <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
     </div>
   </div>
-   <div class="row mb-2">
+   <div class="row ">
      @yield('content')
    </div>
-  </div>
+
 </main>
 <footer class="blog-footer">
   <p>Blog template built for <a href="https://getbootstrap.com/">Bootstrap</a> by <a href="https://twitter.com/mdo">@mdo</a>.</p>
@@ -263,8 +272,5 @@
     <a href="#">Back to top</a>
   </p>
 </footer>
-
-
-
   </body>
 </html>
