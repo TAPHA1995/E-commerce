@@ -52,8 +52,8 @@ border-bottom-right-radius: 16px;
                       <h1 class="fw-bold mb-0 text-black">Shopping Cart</h1>
                       <h6 class="mb-0 text-muted">{{ Cart::instance('cart.index')->content()->count() }} article @if (Cart::instance('cart.index')->content()->count() > 1) <span style="margin-left:-3px">s</span> @endif</h6>
                     </div>
-                    @if (Cart::count() > 0)
-                    @foreach (Cart::content() as $product)
+                    @if ($cartItems->count() > 0)
+                    @foreach ($cartItems as $product)
                     <hr class="my-4">
                     <div class="row mb-4 d-flex justify-content-between align-items-center">
                       <div class="col-md-2 col-lg-2 col-xl-2">
@@ -66,51 +66,48 @@ border-bottom-right-radius: 16px;
                         <h6 class="text-black mb-0">{{$product->model->subtitle}}</h6>
                       </div>
                       <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
-                        <button class="btn btn-link px-2 "
-                          onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
-                          <i class="fas fa-minus"></i>
-                        </button>
-                        <input id="form1" min="0" name="quantity" value="1" type="number"
-                          class="form-control form-control-sm" />
-                        <button class="btn btn-link px-2 "
-                          onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
-                          <i class="fas fa-plus"></i>
-                        </button>
+                        <input name="quantity" value="{{$product->qty}}" type="number"
+                          class="form-control form-control-sm" data-rowid="{{$product->rowId}}" onchange="updateQuantity(this)" />
                       </div>
                       <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                       @if ($product->model->sale_price)
-                        <p><strong>{{$product->model->sale_price}} Cfa</strong></p>
-                        <del>{{$product->model->regular_price}}</del>
-                        <span>{{round((($product->model->regular_price - $product->model->sale_price)/$product->model->regular_price)*100)}}% de réduction</span> 
-                      @else
-                        <p><strong>{{$product->model->regular_price}} Cfa</strong></p>
-                      @endif
+                     <p>{{$product->subtotal()}}</p>
                       </div>
                       <div class="col-md-1 col-lg-1 col-xl-1 text-end">
                         <a href="#!" class="text-muted"><i class="fas fa-times"></i></a>
                       </div>
                     </div>
                     @endforeach
+                     <hr class="my-4">
+                    <a href="/" class="btn btn-primary">Continuez le Shopping</a>
+                     @else
+                    <div clasS="row">
+                        <div class="col-md-12 text-center">
+                        <h3>Votre panier est vide</h3>
+                        <a href="/" class="btn btn-primary">Shopping maintenant</a>
+                        </div>
+                    </div>
                     @endif
-                    <hr class="my-4">
                   </div>
                 </div>
                 <div class="col-lg-4 bg-grey">
+                <form class="" action="#" method="POST">
+                @csrf
                   <div class="p-5">
                     <h3 class="fw-bold mb-5 mt-2 pt-1">Summary</h3>
                     <hr class="my-4">
                     <div class="d-flex justify-content-between mb-4">
-                      <h5 class="text-uppercase">items 3</h5>
-                      <h5>€ 132.00</h5>
+                    <h6 class="text-uppercase"><span>{{ Cart::instance('cart.index')->content()->count() }}</span>  article @if (Cart::instance('cart.index')->content()->count() > 1) <span style="margin-left:-3px">s</span> @endif</h6>
+                      <h5>{{Cart::instance('cart.index')->subtotal()}}</h5>
                     </div>
-                    <h5 class="text-uppercase mb-3">Shipping</h5>
+                    <h5 class="text-uppercase mb-3">Livraison</h5>
                     <div class="mb-4 pb-2">
-                      <select class="select">
-                        <option value="1">Standard-Delivery- €5.00</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                        <option value="4">Four</option>
+
+                      <select class="select" name="livraison">
+
+
+
                       </select>
+
                     </div>
                     <h5 class="text-uppercase mb-3">Give code</h5>
                     <div class="mb-5">
@@ -122,11 +119,12 @@ border-bottom-right-radius: 16px;
                     <hr class="my-4">
                     <div class="d-flex justify-content-between mb-5">
                       <h5 class="text-uppercase">Total price</h5>
-                      <h5>€ 137.00</h5>
+                        <h5>{{Cart::instance('cart.index')->subtotal()}}</h5>
                     </div>
-                    <button type="button" class="btn btn-dark btn-block btn-lg"
+                    <button type="submit" class="btn btn-dark btn-block btn-lg"
                       data-mdb-ripple-color="dark">Register</button>
                   </div>
+                </form>
                 </div>
               </div>
             </div>
@@ -135,4 +133,18 @@ border-bottom-right-radius: 16px;
       </div>
     </div>
   </section>
+  <form id="updateCartQty" action="{{route('cart.update')}}" method="POST">
+    @csrf
+    @method('put')
+    <input type="hidden" id="rowId" name="rowId"/>
+    <input type="hidden" id="quantity" name="quantity"/>
+  </form>
+  <script>
+    function updateQuantity(qty)
+    {
+        $('#rowId').val($(qty).data('rowid'));
+        $('#quantity').val($(qty).val());
+        $('#updateCartQty').submit();
+    }
+  </script>
 @endsection

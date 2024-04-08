@@ -25,7 +25,12 @@
          <form action="{{ route('card.store')}}" method="POST">
             @csrf
             <input type="hidden" name="product_id" value="{{$product->id}}">
-            <button type="submit" class="btn btn-success">Ajouter au panier</button>
+            <input type="hidden" name="quantity" id="qty"value="1">
+            <button type="submit" class="btn btn-success" 
+            @if ($product->livraisonOrDK == 'Hors Dakar->Non disponible')
+                onclick='return confirm("La livraison Hors Dakar est non disponible pour cet article. cliquez sur OK si vous étés sur Dakar sinon cliquez sur  Annuler ?")'
+            @endif
+             >Ajouter au panier</button>
          </form>
       </div>
       <div>

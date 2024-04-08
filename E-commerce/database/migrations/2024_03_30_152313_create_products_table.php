@@ -19,6 +19,9 @@ return new class extends Migration
             $table->string('description');
             $table->string('regular_price');
             $table->string('sale_price')->nullable();
+            $table->string('livraisonDK');
+            $table->string('livraisonOrDK');
+            $table->string('livraisonGratuit');
             $table->string('SKU');
             $table->enum('stock_status',["instock","outofstock"]);
             $table->boolean('featured')->default(false);

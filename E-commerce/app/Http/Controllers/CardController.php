@@ -11,6 +11,7 @@ class CardController extends Controller
     public function index()
     {
         $cartItems = Cart::instance('cart.index')->content();
+
         return view('cart.index', ['cartItems'=>$cartItems]);
     }
 
@@ -25,22 +26,22 @@ class CardController extends Controller
 
         // $duplicat = Cart::search(function ($cartItem, $rowId) use($request) {
         //     return $cartItem->id == $request->product_id;
-        // });
+        // })
 
 
         $product = Product::find($request->product_id);
-        $cartItems = Cart::instance('cart.index')->content();
-        $duplicat =Cart::search(function ($cartItem, $rowId)
-            use($request) {
-                return $cartItem->id == $request->product_id;
-            });
-        if ( $request->product_id === 1) {
-            return redirect('/')->with('success', 'Le produit a déjà été ajouté.');
-        }
-        Cart::instance('cart.index')->add($product->id, $product->titre, 1, $product->regular_price,['$product' => 'sale_pric'])->associate('App\Models\Product');
+        $price = $product->sale_price ? $product->sale_price : $product->regular_price;
+        Cart::instance('cart.index')->add($product->id, $product->titre, 1, $price)->associate('App\Models\Product');
         return redirect('/')->with('success', 'Le produit a bien été ajouté.');
-    }
 
+
+    }
+    public function updateCart(Request $request)
+    {
+        Cart::instance('cart.index')->update($request->rowId, $request->quantity);
+        return redirect()->back();
+
+    }
     // public function store(Request $request)
     // {
 

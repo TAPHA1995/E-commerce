@@ -19,22 +19,25 @@ class ProductFactory extends Factory
 
     public function definition(): array
     {
-        $product_name = $this ->faker->unique()->words($nb=2, $asText = true);
-        $slug = Str::slug($product_name);
-        $image_name = $this->faker->numberBetween(1,24).'.png';
+        // $product_name = $this ->faker->unique()->words($nb=2, $asText = true);
+        // $slug = Str::slug($product_name);
+        // $image_name = $this->faker->numberBetween(1,24).'.png';
 
-        return [
-            'titre' =>Str::title($product_name),
-            'slug' =>$slug,
-            'description' => $this->faker->text(200),
-            'regular_price' => $this->faker->numberBetween(100000,1000000),
-            'SKU' => $this->faker->numberBetween(100,5000),
-            'stock_status' => 'instock',
-            'quantity' => $this->faker->numberBetween(100,200),
-            'image' => $image_name,
-            'images' => $image_name,
-            'category_id' => $this->faker->numberBetween(1,6),
-            'brand_id' => $this->faker->numberBetween(1,6),
-        ];
+        // return [
+        //     'titre' =>Str::title($product_name),
+        //     'slug' =>$slug,
+        //     'description' => $this->faker->text(200),
+        //     'regular_price' => $this->faker->numberBetween(100000,1000000),
+        //     'livraisonDK'$this->faker->numberBetween(2500,15000);
+        //     'livraisonOrDK'$this->faker->numberBetween(100,5000);
+        //     'livraisonGratuit' => 'Gratuit',
+        //     'SKU' => $this->faker->numberBetween(100,5000),
+        //     'stock_status' => 'instock',
+        //     'quantity' => $this->faker->numberBetween(100,200),
+        //     'image' => $image_name,
+        //     'images' => $image_name,
+        //     'category_id' => $this->faker->numberBetween(1,6),
+        //     'brand_id' => $this->faker->numberBetween(1,6),
+        // ];
     }
 }
