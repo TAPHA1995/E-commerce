@@ -18,6 +18,9 @@ Route::get('/produitShow/{slug}', [ProductController::class, 'show'])->name('pro
 
 //update quantity
 Route::put('/cart/update', [CardController::class, 'updateCart'])->name('cart.update');
+
+
+
 //Ajouter à la card
 Route::post('/panier/ajouter', [CardController::class, 'addCart'])->name('card.store');
 

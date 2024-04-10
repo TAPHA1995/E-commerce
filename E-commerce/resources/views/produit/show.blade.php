@@ -10,15 +10,15 @@
         @if ($product->sale_price)
           <p><strong>{{$product->sale_price}} Cfa</strong></p>
           <del>{{$product->regular_price}}</del>
-          <span>{{round((($product->regular_price - $product->sale_price)/$product->regular_price)*100)}}% de réduction</span> 
+          <span>{{round((($product->regular_price - $product->sale_price)/$product->regular_price)*100)}}% de réduction</span>
         @else
           <p><strong>{{$product->regular_price}} Cfa</strong></p>
         @endif
         <div>
         @if ($product->stock_status == 'instock')
-          Instock 
+          Instock
         @else
-          out of stock   
+          out of stock
         @endif
         </div>
         <br/>
@@ -26,7 +26,8 @@
             @csrf
             <input type="hidden" name="product_id" value="{{$product->id}}">
             <input type="hidden" name="quantity" id="qty"value="1">
-            <button type="submit" class="btn btn-success" 
+            <input type="hidden" name="livraison" id="lvr"value="2000">
+            <button type="submit" class="btn btn-success"
             @if ($product->livraisonOrDK == 'Hors Dakar->Non disponible')
                 onclick='return confirm("La livraison Hors Dakar est non disponible pour cet article. cliquez sur OK si vous étés sur Dakar sinon cliquez sur  Annuler ?")'
             @endif
