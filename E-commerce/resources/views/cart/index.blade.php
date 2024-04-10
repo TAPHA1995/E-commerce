@@ -120,6 +120,7 @@ border-bottom-right-radius: 16px;
                     </div>
                     <hr class="my-4">
                     <div class="d-flex justify-content-between mb-5">
+
                       <h5 class="text-uppercase">Total price</h5>
                         <h5 class="sommeTotalDK" id="sommeTotalDK">
                             @php
@@ -141,6 +142,7 @@ border-bottom-right-radius: 16px;
                             echo $currentSubtotal;
                             @endphp
                             Cfa
+
                     </div>
                     <button type="submit" class="btn btn-dark btn-block btn-lg"
                       data-mdb-ripple-color="dark">Register</button>
@@ -230,8 +232,8 @@ border-bottom-right-radius: 16px;
                     //     recherche.style.transition = "all, 0.4s ease";
                     //    };
 
-                    optionLivraisonDK = document.querySelector(".livraisonDK");
-                    optionLivraisonDK.onclick = function(){
+                        optionLivraisonDK = document.querySelector(".livraisonDK");
+                        optionLivraisonDK.onclick = function(){
                         affichlvrDK = document.querySelector(".sommeTotalDK");
                         affichlvrDK.classList.add("active");
                         affichlvrHDK = document.querySelector(".sommeTotalHDK");
