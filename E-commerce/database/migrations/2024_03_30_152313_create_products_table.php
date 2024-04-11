@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('description');
             $table->string('regular_price');
             $table->string('sale_price')->nullable();
+            $table->string('statutlivraison');
             $table->string('livraisonDK');
             $table->string('livraisonOrDK');
             $table->string('livraisonGratuit');
@@ -28,13 +29,10 @@ return new class extends Migration
             $table->unsignedInteger('quantity')->default(1);
             $table->string('image');
             $table->text('images');
-            // $table->unsignedBigInteger('category_id');
-            // $table->unsignedBigInteger('brand_id');
             $table->timestamps();
             $table->foreignIdFor(\App\Models\Category::class, 'category_id')->onDelete('cascade');
             $table->foreignIdFor(\App\Models\Brand::class, 'brand_id')->onDelete('cascade');
-            // $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
-            // $table->foreign('brand_id')->references('id')->on('brands')->onDelete('cascade');
+
         });
     }
 

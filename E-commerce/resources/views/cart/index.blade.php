@@ -70,7 +70,7 @@ border-bottom-right-radius: 16px;
                           class="form-control form-control-sm" data-rowid="{{$product->rowId}}" onchange="updateQuantity(this)" />
                       </div>
                       <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                     <p>{{$product->subtotal()}}</p>
+                     <p>{{$product->subtotal()}} Cfa</p>
                       </div>
                       <div class="col-md-1 col-lg-1 col-xl-1 text-end">
                         <a href="#!" class="text-muted"><i class="fas fa-times"></i></a>
@@ -97,19 +97,26 @@ border-bottom-right-radius: 16px;
                     <hr class="my-4">
                     <div class="d-flex justify-content-between mb-4">
                     <h6 class="text-uppercase"><span>{{ Cart::instance('cart.index')->content()->count() }}</span>  article @if (Cart::instance('cart.index')->content()->count() > 1) <span style="margin-left:-3px">s</span> @endif</h6>
-                      <h5>{{Cart::instance('cart.index')->subtotal()}}</h5>
+                      <h5>{{Cart::instance('cart.index')->subtotal()}} Cfa</h5>
                     </div>
                     <h5 class="text-uppercase mb-3">Livraison</h5>
                     <div style="display: flex; gap:10px ">
                     <div class="mb-4 pb-2 livraisonDK">
                         <div class="btn tbnlvrDK">Dakar +2000 Cfa</div>
                     </div>
-                    <div class="mb-4 pb-2 livraisonHDK">
+                    @foreach($cartItems as $cartItem)
+                    @if($cartItem->model->livraisonOrDK == 'Non disponible')
+                     <button class="mb-4 pb-2 livraisonHDK" disabled>
+                        <div class="alert alert-danger tbnlvrHDK">Hors Dakar Non disponible</div>
+                     </button>
+                     @break
+                     @else
+                     <div class="mb-4 pb-2 livraisonHDK">
                         <div class="btn tbnlvrHDK">Hors Dakar 2500 Cfa</div>
-                    </div>
-                    <div class="mb-4 pb-2 livraisonG">
-                        <div class="btn tbnlvrG">Dakar Gratuit</div>
-                    </div>
+                     </div>
+                     @break
+                     @endif
+                    @endforeach
                     </div>
                     <h5 class="text-uppercase mb-3">Give code</h5>
                     <div class="mb-5">
@@ -120,21 +127,26 @@ border-bottom-right-radius: 16px;
                     </div>
                     <hr class="my-4">
                     <div class="d-flex justify-content-between mb-5">
-
+                    @if ($cartItems->count() > 0)
                       <h5 class="text-uppercase">Total price</h5>
                         <h5 class="sommeTotalDK" id="sommeTotalDK">
-                            @php
-                            $currentSubtotal = (float) str_replace(',', '', Cart::instance('cart.index')->subtotal());
-                            echo $currentSubtotal + $product->model->livraisonDK;
-                            @endphp
-                            Cfa
+                             @php
+                             $currentSubtotal = (float) str_replace(',', '', Cart::instance('cart.index')->subtotal());
+                             echo $currentSubtotal + $product->model->livraisonDK;
+                             @endphp
+                             Cfa
                         </h5>
                         <h5 class="sommeTotalHDK" id="sommeTotalHDK">
+
+                            @if ( $product->model->livraisonOrDK == 'Non disponible')
+                            <div class="alert alert-danger">livraison hors Dakar non disponible</div>
+                            @else
                             @php
                             $currentSubtotal = (float) str_replace(',', '', Cart::instance('cart.index')->subtotal());
                             echo $currentSubtotal + $product->model->livraisonOrDK;
                             @endphp
                             Cfa
+                            @endif
                         </h5>
                         <h5 class="sommeTotalG" id="sommeTotalG">
                             @php
@@ -142,7 +154,7 @@ border-bottom-right-radius: 16px;
                             echo $currentSubtotal;
                             @endphp
                             Cfa
-
+                    @endif
                     </div>
                     <button type="submit" class="btn btn-dark btn-block btn-lg"
                       data-mdb-ripple-color="dark">Register</button>
@@ -159,7 +171,7 @@ border-bottom-right-radius: 16px;
   <form id="updateCartQty" action="{{route('cart.update')}}" method="POST">
     @csrf
     @method('put')
-    <input type="hidden" id="rowId" name="rowId"/>
+    <input type="hidden" id="rowId" name="rowId" />
     <input type="hidden" id="quantity" name="quantity"/>
   </form>
   <style>
@@ -168,6 +180,7 @@ border-bottom-right-radius: 16px;
     }
     .sommeTotalDK.active{
         display: flex;
+
 
     }
     .sommeTotalHDK{

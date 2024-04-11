@@ -35,6 +35,7 @@ class ProductTableSeeder extends Seeder
             'description'=> $faker->text,
             'regular_price'=> $faker->numberBetween(100000,1000000),
             'SKU' => $faker->numberBetween(100,5000),
+            'statutlivraison'=> 'payant',
             'livraisonDK'=> '2500',
             'livraisonOrDK'=>'5000',
             'livraisonGratuit' => 'Gratuit',

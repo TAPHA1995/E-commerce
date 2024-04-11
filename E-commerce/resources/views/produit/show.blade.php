@@ -28,7 +28,7 @@
             <input type="hidden" name="quantity" id="qty"value="1">
             <input type="hidden" name="livraison" id="lvr"value="2000">
             <button type="submit" class="btn btn-success"
-            @if ($product->livraisonOrDK == 'Hors Dakar->Non disponible')
+            @if ($product->livraisonOrDK == 'Non disponible')
                 onclick='return confirm("La livraison Hors Dakar est non disponible pour cet article. cliquez sur OK si vous étés sur Dakar sinon cliquez sur  Annuler ?")'
             @endif
              >Ajouter au panier</button>
