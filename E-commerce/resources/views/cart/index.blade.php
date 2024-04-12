@@ -100,24 +100,55 @@ border-bottom-right-radius: 16px;
                       <h5>{{Cart::instance('cart.index')->subtotal()}} Cfa</h5>
                     </div>
                     <h5 class="text-uppercase mb-3">Livraison</h5>
-                    <div style="display: flex; gap:10px ">
-                    <div class="mb-4 pb-2 livraisonDK">
-                        <div class="btn tbnlvrDK">Dakar +2000 Cfa</div>
-                    </div>
-                    @foreach($cartItems as $cartItem)
-                    @if($cartItem->model->livraisonOrDK == 'Non disponible')
-                     <button class="mb-4 pb-2 livraisonHDK" disabled>
-                        <div class="alert alert-danger tbnlvrHDK">Hors Dakar Non disponible</div>
-                     </button>
-                     @break
-                     @else
-                     <div class="mb-4 pb-2 livraisonHDK">
-                        <div class="btn tbnlvrHDK">Hors Dakar 2500 Cfa</div>
-                     </div>
-                     @break
-                     @endif
-                    @endforeach
-                    </div>
+                    @if ($cartItems->count() > 0)
+                        <div style="display: flex; gap:10px: flex-wrap:wrap ">
+                            <div class="mb-4 pb-2 livraisonDK">
+                                <div class="btn tbnlvrDK">Dakar +2000 Cfa</div>
+                            </div>
+                        @php
+                            $nbProduitsNonDisponibles = 0;
+                        @endphp
+                        @foreach($cartItems as $cartItem)
+                        @if($cartItem->model->livraisonOrDK == 'Non disponible')
+                            @php
+                                $nbProduitsNonDisponibles++;
+                            @endphp
+                        @endif
+                        @endforeach
+
+                        @php
+                            $nbProduitslvrGratuit = 0;
+                            @endphp
+                            @foreach($cartItems as $cartItem)
+                            @if($cartItem->model->livraisonDK == 0)
+                            @php
+                                $nbProduitslvrGratuit++;
+                            @endphp
+                            @endif
+                            @endforeach
+                        @if ($nbProduitslvrGratuit == $cartItems->count() && $nbProduitsNonDisponibles == $cartItems->count())
+                        <div class="mb-4 pb-2 livraisonG">
+                            <div class="btn tbnlvrG alert alert-success">La livraison est gratuit pour cette commande</div>
+                        </div>
+                        @endif
+                        @if ($nbProduitslvrGratuit == $cartItems->count() && $nbProduitsNonDisponibles > 0)
+                        <button class="mb-4 pb-2 livraisonHDK" disabled>
+                            <div class="alert alert-danger tbnlvrHDK">Hors Dakar Non disponible</div>
+                        </button>
+                        @endif
+
+                        @if ($nbProduitslvrGratuit == $cartItems->count() && $nbProduitsNonDisponibles == 0)
+                        <div class="mb-4 pb-2 livraisonHDK">
+                            <div class="btn tbnlvrHDK">Hors Dakar 2500 Cfa</div>
+                        </div>
+                        @endif
+                        @if ($nbProduitsNonDisponibles == 0)
+                        <div class="mb-4 pb-2 livraisonHDK">
+                            <div class="btn tbnlvrHDK">Hors Dakar 2500 Cfa</div>
+                        </div>
+                        @endif
+                        </div>
+                    @endif
                     <h5 class="text-uppercase mb-3">Give code</h5>
                     <div class="mb-5">
                       <div class="form-outline">
@@ -129,12 +160,39 @@ border-bottom-right-radius: 16px;
                     <div class="d-flex justify-content-between mb-5">
                     @if ($cartItems->count() > 0)
                       <h5 class="text-uppercase">Total price</h5>
+                      @php
+                      $produitNonDisponibleTrouve = false;
+                      @endphp
+                      @foreach($cartItems as $cartItem)
+                      @if($cartItem->model->livraisonDK == 2500)
+                      @php
+                      $produitNonDisponibleTrouve = true;
+                      @endphp
+                      @endif
+                      @endforeach
+
+                      @if(!$produitNonDisponibleTrouve)
+                      @endif
                         <h5 class="sommeTotalDK" id="sommeTotalDK">
-                             @php
+                            @php
                              $currentSubtotal = (float) str_replace(',', '', Cart::instance('cart.index')->subtotal());
-                             echo $currentSubtotal + $product->model->livraisonDK;
+                             $SommelivraisaonDK = $currentSubtotal + $cartItem->model->livraisonDK;
                              @endphp
-                             Cfa
+                            @php
+                            $currentSubtotalGD = (float) str_replace(',', '', Cart::instance('cart.index')->subtotal());
+                            @endphp
+                            @if ($currentSubtotalGD == $SommelivraisaonDK)
+                                @php
+                                @endphp
+                                @else
+                               @php
+
+                               @endphp
+                            @endif
+                            @php
+                                echo $SommelivraisaonDK;
+                            @endphp
+                            Cfa
                         </h5>
                         <h5 class="sommeTotalHDK" id="sommeTotalHDK">
 
@@ -154,7 +212,11 @@ border-bottom-right-radius: 16px;
                             echo $currentSubtotal;
                             @endphp
                             Cfa
-                    @endif
+                        </h5>
+                        <h5>
+
+                       </h5>
+                      @endif
                     </div>
                     <button type="submit" class="btn btn-dark btn-block btn-lg"
                       data-mdb-ripple-color="dark">Register</button>
