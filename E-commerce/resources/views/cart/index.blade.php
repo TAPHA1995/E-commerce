@@ -73,17 +73,20 @@ border-bottom-right-radius: 16px;
                      <p>{{$product->subtotal()}} Cfa</p>
                       </div>
                       <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                        <a href="#!" class="text-muted"><i class="fas fa-times"></i></a>
+                        <a href="#" class="text-muted" onclick="removeItemFromCart('{{$product->rowId}}')"><i class="fas fa-times"></i></a>
                       </div>
                     </div>
                     @endforeach
                      <hr class="my-4">
-                    <a href="/" class="btn btn-primary">Continuez le Shopping</a>
+                     <div style="display:flex; justify-content:between; gap:10px">
+                        <a href="/" class="btn btn-primary">Continuez le Shopping</a>
+                        <div class="btn btn-danger" onclick="clearCart()">Vider le panier</div>
+                     </div>
                      @else
                     <div clasS="row">
                         <div class="col-md-12 text-center">
                         <h3>Votre panier est vide</h3>
-                        <a href="/" class="btn btn-primary">Shopping maintenant</a>
+                        <a href="/" class="btn btn-primary" >Shopping maintenant</a>
                         </div>
                     </div>
                     @endif
@@ -139,12 +142,12 @@ border-bottom-right-radius: 16px;
 
                         @if ($nbProduitslvrGratuit == $cartItems->count() && $nbProduitsNonDisponibles == 0)
                         <div class="mb-4 pb-2 livraisonHDK">
-                            <div class="btn tbnlvrHDK">Hors Dakar 2500 Cfa</div>
+                            <div class="btn tbnlvrHDK">Hors Dakar +2500 Cfa</div>
                         </div>
                         @endif
                         @if ($nbProduitsNonDisponibles == 0)
                         <div class="mb-4 pb-2 livraisonHDK">
-                            <div class="btn tbnlvrHDK">Hors Dakar 2500 Cfa</div>
+                            <div class="btn tbnlvrHDK">Hors Dakar +2500 Cfa</div>
                         </div>
                         @endif
                         </div>
@@ -230,12 +233,7 @@ border-bottom-right-radius: 16px;
       </div>
     </div>
   </section>
-  <form id="updateCartQty" action="{{route('cart.update')}}" method="POST">
-    @csrf
-    @method('put')
-    <input type="hidden" id="rowId" name="rowId" />
-    <input type="hidden" id="quantity" name="quantity"/>
-  </form>
+ 
   <style>
     .sommeTotalDK{
         display: none;
@@ -290,99 +288,98 @@ border-bottom-right-radius: 16px;
     }
 
   </style>
+   <form id="updateCartQty" action="{{route('cart.update')}}" method="POST">
+    @csrf
+    @method('put')
+    <input type="hidden" id="rowId" name="rowId" />
+    <input type="hidden" id="quantity" name="quantity"/>
+  </form>
+
+  <form id="deleteformCart" action="{{route('card.supprimer')}}" method="POST">
+    @csrf
+    @method('delete')
+    <input type="hidden" id="rowId_D" name="rowId" />
+  </form>
+  <form id="clearCart" action="{{route('card.vider')}}" method="POST">
+      @csrf
+      @method('delete')
+  </form>
+  
+
+
   <script>
+  
+  //modifier la quantité dans le panier
     function updateQuantity(qty)
     {
         $('#rowId').val($(qty).data('rowid'));
         $('#quantity').val($(qty).val());
         $('#updateCartQty').submit();
     }
+//SUPPRIMER DES ARTICLES DANS LE PANIER
+function removeItemFromCart(rowId)
+    {
+        $('#rowId_D').val(rowId);
+        $('#deleteformCart').submit();
+    }
 
+//VIDER LE PANIER
+function clearCart()
+    {
+        $('#clearCart').submit();
+    }
+      optionLivraisonDK = document.querySelector(".livraisonDK");
+      optionLivraisonDK.onclick = function(){
+      affichlvrDK = document.querySelector(".sommeTotalDK");
+      affichlvrDK.classList.add("active");
+      affichlvrHDK = document.querySelector(".sommeTotalHDK");
+      affichlvrHDK.classList.remove("active");
+      affichlvrG = document.querySelector(".sommeTotalG");
+      affichlvrG.classList.remove("active");
+      focuslvrDK = document.querySelector(".tbnlvrDK");
+      focuslvrDK.classList.add("active");
+      focuslvrHDK = document.querySelector(".tbnlvrHDK");
+      focuslvrHDK.classList.remove("active");
+      focuslvrG = document.querySelector(".tbnlvrG");
+      focuslvrG.classList.remove("active");
 
-                    // iconv = document.querySelector(".iconv");
-                    // iconv.onclick = function(){
-                    //     recherche = document.querySelector(".overlayRES");
-                    //     recherche.classList.add("active");
-                    //     active.style.transition = "all, 0.4s ease";
-                    //     recherche.style.transition = "all, 0.4s ease";
-                    //    };
+      };
 
-                        optionLivraisonDK = document.querySelector(".livraisonDK");
-                        optionLivraisonDK.onclick = function(){
-                        affichlvrDK = document.querySelector(".sommeTotalDK");
-                        affichlvrDK.classList.add("active");
-                        affichlvrHDK = document.querySelector(".sommeTotalHDK");
-                        affichlvrHDK.classList.remove("active");
-                        affichlvrG = document.querySelector(".sommeTotalG");
-                        affichlvrG.classList.remove("active");
-                        focuslvrDK = document.querySelector(".tbnlvrDK");
-                        focuslvrDK.classList.add("active");
-                        focuslvrHDK = document.querySelector(".tbnlvrHDK");
-                        focuslvrHDK.classList.remove("active");
-                        focuslvrG = document.querySelector(".tbnlvrG");
-                        focuslvrG.classList.remove("active");
+      optionLivraisonHDK = document.querySelector(".livraisonHDK");
+      optionLivraisonHDK.onclick = function(){
+      affichlvrHDK = document.querySelector(".sommeTotalHDK");
+      affichlvrHDK.classList.add("active");
+      affichlvrDK = document.querySelector(".sommeTotalDK");
+      affichlvrDK.classList.remove("active");
+      affichlvrG = document.querySelector(".sommeTotalG");
+      affichlvrG.classList.remove("active");
+      focuslvrHDK = document.querySelector(".tbnlvrHDK");
+      focuslvrHDK.classList.add("active");
+      focuslvrDK = document.querySelector(".tbnlvrDK");
+      focuslvrDK.classList.remove("active");
+      focuslvrG = document.querySelector(".tbnlvrG");
+      focuslvrG.classList.remove("active");
 
-                       };
+      };
 
-                       optionLivraisonHDK = document.querySelector(".livraisonHDK");
-                       optionLivraisonHDK.onclick = function(){
-                        affichlvrHDK = document.querySelector(".sommeTotalHDK");
-                        affichlvrHDK.classList.add("active");
-                        affichlvrDK = document.querySelector(".sommeTotalDK");
-                        affichlvrDK.classList.remove("active");
-                        affichlvrG = document.querySelector(".sommeTotalG");
-                        affichlvrG.classList.remove("active");
-                        focuslvrHDK = document.querySelector(".tbnlvrHDK");
-                        focuslvrHDK.classList.add("active");
-                        focuslvrDK = document.querySelector(".tbnlvrDK");
-                        focuslvrDK.classList.remove("active");
-                        focuslvrG = document.querySelector(".tbnlvrG");
-                        focuslvrG.classList.remove("active");
+      optionLivraisonG = document.querySelector(".livraisonG");
+      optionLivraisonG.onclick = function(){
+      affichlvrG = document.querySelector(".sommeTotalG");
+      affichlvrG.classList.add("active");
+      affichlvrDK = document.querySelector(".sommeTotalDK");
+      affichlvrDK.classList.remove("active");
+      affichlvrHDK = document.querySelector(".sommeTotalHDK");
+      affichlvrHDK.classList.remove("active");
+      focuslvrG = document.querySelector(".tbnlvrG");
+      focuslvrG.classList.add("active");
+      focuslvrHDK = document.querySelector(".tbnlvrHDK");
+      focuslvrHDK.classList.remove("active");
+      focuslvrDK = document.querySelector(".tbnlvrDK");
+      focuslvrDK.classList.remove("active");
 
-                       };
+      };
 
-                       optionLivraisonG = document.querySelector(".livraisonG");
-                       optionLivraisonG.onclick = function(){
-                        affichlvrG = document.querySelector(".sommeTotalG");
-                        affichlvrG.classList.add("active");
-                        affichlvrDK = document.querySelector(".sommeTotalDK");
-                        affichlvrDK.classList.remove("active");
-                        affichlvrHDK = document.querySelector(".sommeTotalHDK");
-                        affichlvrHDK.classList.remove("active");
-                        focuslvrG = document.querySelector(".tbnlvrG");
-                        focuslvrG.classList.add("active");
-                        focuslvrHDK = document.querySelector(".tbnlvrHDK");
-                        focuslvrHDK.classList.remove("active");
-                        focuslvrDK = document.querySelector(".tbnlvrDK");
-                        focuslvrDK.classList.remove("active");
-
-                       };
-
-    // let select = document.querySelector("select");
-    // let affichlvrDK = document.querySelector(".livraisonDK")
-
-    //    select.addEventListener("change", function () {
-    //     if (select.options[this.selectedIndex].value == '2500') {
-    //         let affichlvrDK = document.querySelector(".livraisonDK")
-    //        affichlvrDK.ClassList.add("active")
-    //     }
-    //    })
-
-
-    //    let buttonz = document.getElementById("button&");
-    //     let boitez = document.getElementById("boite");
-    //     let overlayz = document.getElementsByClassName("overlayresv");
-
-    //     buttonz.addEventListener("click", function(){
-    //         buttonz.getElementsByClassName("boite");
-    //         boite.style.left = 0;
-    //         boite.style.display = 'flex';
-    //         boite.style.zIndex = '100';
-    //         overlayresv.style.visibility = 'visible';
-    //         overlayresv.style.display = 'fixed';
-
-    //     });
   </script>
-   </h5>
+  
 
 @endsection

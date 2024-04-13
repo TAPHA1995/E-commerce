@@ -239,8 +239,10 @@
     </nav>
     <br>
     <div class="row flex-nowrap justify-content-between align-items-center">
-        <div class="col-4 pt-1">
-          <a class="link-secondary text-decoration-none" href="{{ route('card.index')}}">Panier <span class="bg-danger rounded-pill text-light p-1">{{ Cart::instance('cart.index')->content()->count() }}</span></a>
+        <div class="" style="display:flex; align-items:center; gap:30px">
+          <div>
+            <span class="bg-danger rounded-pill text-light p-1"><a class="link-secondary text-decoration-none text-light" href="{{ route('card.index')}}">Panier {{ Cart::instance('cart.index')->content()->count() }}</span></a>
+          </div>
         </div>
         <div class="col-4 text-center">
         </div>
@@ -265,7 +267,6 @@
    <div class="row ">
      @yield('content')
    </div>
-
 </main>
 <footer class="blog-footer">
   <p>Blog template built for <a href="https://getbootstrap.com/">Bootstrap</a> by <a href="https://twitter.com/mdo">@mdo</a>.</p>

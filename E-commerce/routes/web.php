@@ -7,9 +7,7 @@ use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 Auth::routes();
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+
 
 //Affichage page d'accueil
 Route::get('/', [ProductController::class, 'index'])->name('produit.index');
@@ -26,12 +24,10 @@ Route::post('/panier/ajouter', [CardController::class, 'addCart'])->name('card.s
 
 //AFFICHER LE PANIER
 Route::get('/panier',[CardController::class, 'index'])->name('card.index');
-
-Route::get('/videpanier', function() {
-    Cart::destroy();
-});
-
-
-
+//SUPPRIMER DES PRODUIT DANS LE PANIER
+Route::delete('/cart/supprimer',[CardController::class, 'removeitem'])->name('card.supprimer');
+//VIDER LE PANIER
+Route::delete('/cart/viderPanier',[CardController::class, 'clearCart'])->name('card.vider');
+//Middleware
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->Middleware('Admin');
 
