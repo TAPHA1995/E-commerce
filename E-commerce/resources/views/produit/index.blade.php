@@ -1,4 +1,4 @@
-@extends('layouts.master')           
+@extends('layouts.master')
 @section('content')
     <div style="display:flex; align-items:center; gap:30px; margin-bottom:10px">
         <div>
@@ -27,7 +27,7 @@
                 @foreach ($brands as $brand)
                     <li class="list-group-item">
                         <input class="form-check-input me-1"id="br{{$brand->id}}" name="brands"
-                        @if (in_array($brand->id,explode(',',$q_brands))) checked="checked"  
+                        @if (in_array($brand->id,explode(',',$q_brands))) checked="checked"
                         @endif value="{{$brand->id}}"   type="checkbox" onchange="filterproductsByBrands(this)">
                         <label class="form-check-label" for="firstCheckbox">{{$brand->titre}} ({{$brand->product->count()}})</label>
                     </li>
@@ -39,8 +39,8 @@
                 @foreach ($categories as $category)
                 <li class="list-group-item">
                     <input class="form-check-input me-1"
-                    name="categories" id="ct{{$category->id}}" 
-                    @if (in_array($category->id,explode(',',$q_categories))) checked="checked"  
+                    name="categories" id="ct{{$category->id}}"
+                    @if (in_array($category->id,explode(',',$q_categories))) checked="checked"
                     @endif
                     type="checkbox" value="{{$category->id}}" onchange="filterproductsByCategories(this)">
                     <label class="form-check-label" for="firstCheckbox">
@@ -48,19 +48,7 @@
                 </li>
                 @endforeach
             </ul>
-            <div class="accordion-items category-price">
-              <h2 class="accordion-header" id="headingFour">
-              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">Price
-              </button>
-              <h2>
-              <div id="collapseFour" class="accordion-collapse collapse show" aria-labelledby="headingFour" data-be-parent="#accordionExample">
-              <div class="accordion-body">
-               <div class="range-slider category-list">
-                    <input type="range" class="js-range-slider" id="js-range-price" value="{{ $from }},{{ $to }}" min="0" max="1000000" step="100"/>
-               </div>
-              </div>
-              </div>
-            </div>
+
         </div>
         <div class="d-flex flex-column flex-wrap flex-md-row justify-content-start align-items-center gap-2 ">
             @foreach ($product as $products)
@@ -73,20 +61,17 @@
                 </div>
             </a>
             @endforeach
-        </div>   
+        </div>
     </div>
     <div>
     {{ $product->withQueryString()->links() }}
     </div>
-    <form id="formfilter" method="GET">  
+    <form id="formfilter" method="GET">
         <input type="hidden" name="page" id="page" value="{{$page}}"/>
         <input type="hidden" name="size" id="size" value="{{$size}}"/>
         <input type="hidden" name="order" id="order" value="{{$order}}"/>
         <input type="hidden" name="brands" id="brands" value="{{$q_brands}}"/>
          <input type="hidden" name="categories" id="categories" value="{{$q_categories}}"/>
-        <form id="formfilter" method="GET">  
-            <input type="hidden" name="prange" id="prange" value="{{ $from }},{{ $to }}"/>
-        </form> 
     </form>
     <script>
     $(function () {
@@ -97,20 +82,10 @@
         });
         $('#orderby').on("change", function(){
            $("#order").val($("#orderby option:selected").val());
-           $("#formfilter").submit();  
+           $("#formfilter").submit();
         })
-      
-        $(document).ready(function() {
-                var $range = $(".js-range-slider");
-                var instance = $range.data("ionRangeSlider");
-                $range.on("change", function () {
-                    var value = $(this).val();
-                    $("#prange").val(value);
-                    setTimeout(function() {
-                        $("#formfilter").submit();
-                    }, 1000);
-                });
-            });
+
+
         });
         function filterproductsByBrands(brand) {
             var brands = "";
@@ -122,7 +97,7 @@
                 }
             });
             $("#brands").val(brands);
-            $("#formfilter").submit(); 
+            $("#formfilter").submit();
         }
 
 
@@ -136,7 +111,7 @@
                 }
             });
             $("#categories").val(categories);
-            $("#formfilter").submit(); 
+            $("#formfilter").submit();
         }
 
         $(document).ready(function () {
@@ -145,32 +120,32 @@
                 isClosed = false;
 
                 trigger.click(function () {
-                hamburger_cross();      
+                hamburger_cross();
                 });
 
             function hamburger_cross() {
 
-            if (isClosed == true) {          
+            if (isClosed == true) {
                 overlay.hide();
                 trigger.removeClass('is-open');
                 trigger.addClass('is-closed');
                 isClosed = false;
-            } else {   
+            } else {
                 overlay.show();
                 trigger.removeClass('is-closed');
                 trigger.addClass('is-open');
                 isClosed = true;
             }
         }
-            
+
             $('[data-toggle="offcanvas"]').click(function () {
                     $('#wrapper').toggleClass('toggled');
-            });  
+            });
             });
     </script>
 
     <style>
-    
+
       .demo_title h1,h6{
         color: var(--bg-darker);
         }

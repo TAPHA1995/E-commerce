@@ -17,7 +17,7 @@ class ProductController extends Controller
         $page = $request->query("page");
         $size = $request->query("size");
 
-        if (!$page) 
+        if (!$page)
             $page =1;
         if (!$size)
            $size =12;
@@ -47,7 +47,7 @@ class ProductController extends Controller
                 $o_column = "id";
                 $o_order = "DESC";
                 break;
-        
+
             }
 
         $brands = Brand::orderBy("titre",'ASC')->get();
@@ -57,7 +57,7 @@ class ProductController extends Controller
 
 
         $prange = $request->query("prange");
-       
+
         if (!$prange) {
             $prange = "0,1000000";
         }
@@ -65,20 +65,20 @@ class ProductController extends Controller
 
         $from = isset($prangeArray[0]) ? $prangeArray[0] : 0;
         $to = isset($prangeArray[1]) ? $prangeArray[1] : 1000000;
-        
+
         $product = Product::where(function($query) use($q_brands) {
             $query->whereIn('brand_id', explode(',', $q_brands))->orWhereRaw("'".$q_brands."'=''");
         })
         ->where(function($query) use($q_categories) {
             $query->whereIn('category_id', explode(',', $q_categories))->orWhereRaw("'".$q_categories."'=''");
         })
-        ->whereBetween('regular_price', [$from, $to])
+        // ->whereBetween('regular_price', [$from, $to])
         ->orderBy('created_at', 'DESC')
         ->orderBy($o_column, $o_order)
         ->paginate($size);
-        
+
         $product->withQueryString();
-        
+
         return view('produit.index', [
             'product' => $product,
             'page' => $page,
@@ -96,7 +96,7 @@ class ProductController extends Controller
 
 
         // $prange = $request->query("prange");
-      
+
         // if (!$prange)
         // $prange = "0,1000000";
         // $from = explode(",",$prange)[0];
