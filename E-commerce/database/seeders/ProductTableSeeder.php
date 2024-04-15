@@ -28,16 +28,16 @@ class ProductTableSeeder extends Seeder
         // }
 
         $faker = Factory::create();
-        for($i=0; $i< 30; $i++ ){
+        for($i=0; $i< 100; $i++ ){
             Product::create([
             'titre'=> $faker->sentence(3),
             'slug'=> $faker->slug,
             'description'=> $faker->text,
-            'regular_price'=> $faker->numberBetween(100000,1000000),
+            'regular_price'=> $faker->numberBetween(0,1000000),
             'SKU' => $faker->numberBetween(100,5000),
             'statutlivraison'=> 'payant',
-            'livraisonDK'=> '2500',
-            'livraisonOrDK'=>'5000',
+            'livraisonDK'=> '1500',
+            'livraisonOrDK'=>'2000',
             'livraisonGratuit' => 'Gratuit',
             'subtitle'=> $faker->sentence(4),
             'stock_status' => 'instock',
