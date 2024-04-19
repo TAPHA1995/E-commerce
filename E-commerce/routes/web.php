@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\WishlistController;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Auth;
@@ -28,6 +29,10 @@ Route::get('/panier',[CardController::class, 'index'])->name('card.index');
 Route::delete('/cart/supprimer',[CardController::class, 'removeitem'])->name('card.supprimer');
 //VIDER LE PANIER
 Route::delete('/cart/viderPanier',[CardController::class, 'clearCart'])->name('card.vider');
+//AJOUTER AU FAVORIE
+// Route::post('/wishlist/add',[WishlistController::class, 'addProductTowishlist'])->name('wishlist.store');
+Route::post('/wishlist/add', [WishlistController::class, 'addProductTowishlistt'])->name('wishlist.store');
+
 //Middleware
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->Middleware('Admin');
 

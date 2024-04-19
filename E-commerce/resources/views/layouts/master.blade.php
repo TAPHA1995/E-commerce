@@ -28,10 +28,11 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     {{-- FONTS --}}
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- CSS Ion.RangeSlider -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css"/>
     <!-- Scripts -->
@@ -269,7 +270,9 @@
     <div class="row">
       @yield('content')
     </div>
-  
+    <div style="margin-top: 40px">
+    </div>
+
   {{-- <div style="width:100%; background-color:red">
     <div class="form-check">
       <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">

@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 
 class Product extends Model
 {
+
    public function getPrice()
    {
      $price = $this->regular_price;

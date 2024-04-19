@@ -3,20 +3,19 @@
     <div style="display:flex; align-items:center; gap:30px; margin-bottom:10px">
         <div>
             <select class="form-select" id="pagesize" name="size">
-                <option value="12"> Produits par page</option>
-                <option value="12"{{$size == 12 ? 'selected':''}}>12 Produits par page</option>
-                <option value="24"{{$size == 24 ? 'selected':''}}>24 Produits par page</option>
-                <option value="52"{{$size == 52 ? 'selected':''}}>52 Produits par page</option>
-                <option value="100"{{$size == 100 ? 'selected':''}}>100 Produits par page</option>
+                <option value="25"{{ $size == 25 ? ' selected' : '' }}>25 Produits par page</option>
+                <option value="35"{{ $size == 35 ? ' selected' : '' }}>35 Produits par page</option>
+                <option value="52"{{ $size == 52 ? ' selected' : '' }}>52 Produits par page</option>
+                <option value="100"{{ $size == 100 ? ' selected' : '' }}>100 Produits par page</option>
             </select>
         </div>
         <div>
             <select class="form-select" id="orderby" name="orderby">
-                <option value="-1"{{$order ==- 1? 'selected':''}}>Par ordre</option>
-                <option value="1"{{$order == 1? 'selected':''}}>Nouveau</option>
-                <option value="2"{{$order ==2? 'selected':''}}>Ancien</option>
-                <option value="3"{{$order ==3? 'selected':''}}>Moin cher</option>
-                <option value="4"{{$order ==4? 'selected':''}}>Plus cher</option>
+                <option value="-1"{{ $order == -1 ? ' selected' : '' }}>Par ordre</option>
+                <option value="1"{{ $order == 1 ? ' selected' : '' }}>Nouveau</option>
+                <option value="2"{{ $order == 2 ? ' selected' : '' }}>Ancien</option>
+                <option value="3"{{ $order == 3 ? ' selected' : '' }}>Moin cher</option>
+                <option value="4"{{ $order == 4 ? ' selected' : '' }}>Plus cher</option>
             </select>
         </div>
     </div>
@@ -26,9 +25,9 @@
             <div style="text-align:center; font-size:20px">Marque</div>
                 @foreach ($brands as $brand)
                     <li class="list-group-item">
-                        <input class="form-check-input me-1"id="br{{$brand->id}}" name="brands"
-                        @if (in_array($brand->id,explode(',',$q_brands))) checked="checked"
-                        @endif value="{{$brand->id}}"   type="checkbox" onchange="filterproductsByBrands(this)">
+                        <input class="form-check-input me-1" id="br{{$brand->id}}" name="brands"
+                        {{ in_array($brand->id, explode(',', $q_brands)) ? 'checked' : '' }}
+                        value="{{$brand->id}}"   type="checkbox" onchange="filterproductsByBrands()">
                         <label class="form-check-label" for="firstCheckbox">{{$brand->titre}} ({{$brand->product->count()}})</label>
                     </li>
                 @endforeach
@@ -40,15 +39,17 @@
                 <li class="list-group-item">
                     <input class="form-check-input me-1"
                     name="categories" id="ct{{$category->id}}"
-                    @if (in_array($category->id,explode(',',$q_categories))) checked="checked"
-                    @endif
-                    type="checkbox" value="{{$category->id}}" onchange="filterproductsByCategories(this)">
+                    {{ in_array($category->id, explode(',', $q_categories)) ? 'checked' : '' }}
+                    type="checkbox" value="{{$category->id}}" onchange="filterproductsByCategories()">
                     <label class="form-check-label" for="firstCheckbox">
                     {{$category->titre}} ({{$category->products_count}})</label>
                 </li>
                 @endforeach
             </ul>
-
+            <div>
+                <div style="text-align:center; font-size:20px">Prix</div>
+                <input type="text" id="priceRangeSlider" name="priceRange" />
+            </div>
         </div>
         <div class="d-flex flex-column flex-wrap flex-md-row justify-content-start align-items-center gap-2 ">
             @foreach ($product as $products)
@@ -71,134 +72,69 @@
         <input type="hidden" name="size" id="size" value="{{$size}}"/>
         <input type="hidden" name="order" id="order" value="{{$order}}"/>
         <input type="hidden" name="brands" id="brands" value="{{$q_brands}}"/>
-         <input type="hidden" name="categories" id="categories" value="{{$q_categories}}"/>
+        <input type="hidden" name="categories" id="categories" value="{{$q_categories}}"/>
+        <input type="hidden" name="price_min" id="price_min" value="{{$price_min}}"/>
+        <input type="hidden" name="price_max" id="price_max" value="{{$price_max}}"/>
     </form>
-    <script>
-    $(function () {
-          $("#pagesize").on("change",function()
-        {
-        $("#size").val($("#pagesize option:selected").val());
-        $("#formfilter").submit();
-        });
-        $('#orderby').on("change", function(){
-           $("#order").val($("#orderby option:selected").val());
-           $("#formfilter").submit();
-        })
-
-
-        });
-        function filterproductsByBrands(brand) {
-            var brands = "";
-            $("input[name='brands']:checked").each(function () {
-                if (brands=="") {
-                    brands += this.value;
-                } else {
-                    brands += "," + this.value;
-                }
-            });
-            $("#brands").val(brands);
-            $("#formfilter").submit();
-        }
-
-
-        function filterproductsByCategories(brand) {
-            var categories = "";
-            $("input[name='categories']:checked").each(function () {
-                if (categories=="") {
-                    categories += this.value;
-                } else {
-                    categories += "," + this.value;
-                }
-            });
-            $("#categories").val(categories);
-            $("#formfilter").submit();
-        }
-
-        $(document).ready(function () {
-            var trigger = $('.hamburger'),
-                overlay = $('.overlay'),
-                isClosed = false;
-
-                trigger.click(function () {
-                hamburger_cross();
-                });
-
-            function hamburger_cross() {
-
-            if (isClosed == true) {
-                overlay.hide();
-                trigger.removeClass('is-open');
-                trigger.addClass('is-closed');
-                isClosed = false;
-            } else {
-                overlay.show();
-                trigger.removeClass('is-closed');
-                trigger.addClass('is-open');
-                isClosed = true;
-            }
-        }
-
-            $('[data-toggle="offcanvas"]').click(function () {
-                    $('#wrapper').toggleClass('toggled');
-            });
-            });
-    </script>
-
-    <style>
-
-      .demo_title h1,h6{
-        color: var(--bg-darker);
-        }
-
-        #copyrights{
-        position: absolute;
-        bottom: 2%;
-        right: 2%;
-        }
-
-        #copyrights a{
-        text-decoration: none;
-        color: var(--bg-darker);
-        }
-
-        /* tpn card style */
-        .tpn_card{
-        background: #ffffff;
-        padding: 13px;
-        border-radius:27px;
-        width:250px;
-        }
-
-        .tpn_card img{
-        border-radius:23px;
-        box-shadow: 1px 7px 13px var(--shadow);
-        }
-
-        .tpn_card h5{
-        color: var(--bg-dark);
-        }
-
-        .tpn_card p{
-        color: var(--font-body);
-        font-weight:400;
-        margin-bottom:24px;
-        }
-
-        .tpn_card .tpn_btn{
-        padding:13px 27px !important;
-        line-height: normal;
-        background: green;
-        border-radius:17px;
-        text-decoration:none;
-        color: black;
-        box-shadow: 1px 7px 13px var(--shadow);
-        transition: all .7s ease;
-        }
-
-        .tpn_card .tpn_btn:hover{
-        background: var(--bg-darker);
-        box-shadow: none;
-        }
-    </style>
 @endsection
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css">
+
+<script>
+    function filterproductsByBrands() {
+        var brands = $("input[name='brands']:checked").map(function () {
+            return $(this).val();
+        }).get().join(",");
+        $("#brands").val(brands);
+        $("#formfilter").submit();
+    }
+
+    function filterproductsByCategories() {
+        var categories = $("input[name='categories']:checked").map(function () {
+            return $(this).val();
+        }).get().join(",");
+        $("#categories").val(categories);
+        $("#formfilter").submit();
+    }
+
+    $(document).ready(function () {
+        // Récupérer les valeurs de prix min et max depuis les paramètres de requête
+        var price_min = parseInt("{{$price_min}}");
+        var price_max = parseInt("{{$price_max}}");
+
+        // Initialiser le curseur de prix
+        var priceSlider = $("#priceRangeSlider").ionRangeSlider({
+            type: "double",
+            min: 0,
+            max: 1000000,
+            from: price_min,
+            to: price_max,
+            step: 1000,
+            onStart: function (data) {
+                data.old_from = data.from;
+                data.old_to = data.to;
+            },
+            onChange: function (data) {
+                $("#price_min").val(data.from);
+                $("#price_max").val(data.to);
+            },
+            onFinish: function (data) {
+                $("#formfilter").submit();
+            }
+        });
+
+        // Gestion de la sélection de la taille
+        $("#pagesize").on("change", function () {
+            $("#size").val($(this).val()); // Modifier le sélecteur pour récupérer la valeur de #pagesize
+            $("#formfilter").submit();
+        });
+
+        // Gestion de la sélection de l'ordre
+        $('#orderby').on("change", function () {
+            $("#order").val($(this).val()); // Modifier le sélecteur pour récupérer la valeur de #orderby
+            $("#formfilter").submit();
+        });
+    });
+</script>
