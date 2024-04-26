@@ -152,11 +152,14 @@ border-bottom-right-radius: 16px;
                         @endif
                         </div>
                     @endif
-                    <h5 class="text-uppercase mb-3">Give code</h5>
+                    <h5 class="text-uppercase mb-3">Coordonnées</h5>
                     <div class="mb-5">
                       <div class="form-outline">
-                        <input type="text" id="form3Examplea2" class="form-control form-control-lg" />
-                        <label class="form-label" for="form3Examplea2">Enter your code</label>
+                        <input type="text" id="form3Examplea2" class="form-control form-control-lg mb-2" style='height:3vh' placeholder='Numéro Téléphone 1'/>
+                        <input type="text" id="form3Examplea2" class="form-control form-control-lg mb-2" style='height:3vh'placeholder='Numéro Téléphone 2' />
+                        <input type="email" id="form3Examplea2" class="form-control form-control-lg mb-2" style='height:3vh' placeholder='Email'/>
+                        <input type="text" id="form3Examplea2" class="form-control form-control-lg mb-2" style='height:3vh' placeholder='Adresse de la livraison '/>
+                        
                       </div>
                     </div>
                     <hr class="my-4">
@@ -195,6 +198,7 @@ border-bottom-right-radius: 16px;
                             @php
                                 echo $SommelivraisaonDK;
                             @endphp
+                             <input type="text" id="form3Examplea2" class="form-control form-control-lg mb-2" value="{{$SommelivraisaonDK}}"  />
                             Cfa
                         </h5>
                         <h5 class="sommeTotalHDK" id="sommeTotalHDK">
@@ -205,7 +209,9 @@ border-bottom-right-radius: 16px;
                             @php
                             $currentSubtotal = (float) str_replace(',', '', Cart::instance('cart.index')->subtotal());
                             echo $currentSubtotal + $product->model->livraisonOrDK;
+                            
                             @endphp
+                            <input type="text" id="form3Examplea2" class="form-control form-control-lg mb-2" value="{{$currentSubtotal + $product->model->livraisonOrDK}}"  />
                             Cfa
                             @endif
                         </h5>
@@ -214,6 +220,7 @@ border-bottom-right-radius: 16px;
                             $currentSubtotal = (float) str_replace(',', '', Cart::instance('cart.index')->subtotal());
                             echo $currentSubtotal;
                             @endphp
+                            <input type="text" id="form3Examplea2" class="form-control form-control-lg mb-2" value="{{$currentSubtotal}}"  />
                             Cfa
                         </h5>
                         <h5>
@@ -222,7 +229,7 @@ border-bottom-right-radius: 16px;
                       @endif
                     </div>
                     <button type="submit" class="btn btn-dark btn-block btn-lg"
-                      data-mdb-ripple-color="dark">Register</button>
+                      data-mdb-ripple-color="dark">Payer à la livraison</button>
                   </div>
                 </form>
                 </div>

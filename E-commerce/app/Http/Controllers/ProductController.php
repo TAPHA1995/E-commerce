@@ -92,9 +92,85 @@ class ProductController extends Controller
         //     'to' => $to
         // ]);
 
-        $page = $request->query("page") ?? 1;
-        $size = $request->query("size") ?? 25;
-        $order = $request->query("order") ?? -1;
+    //     $page = $request->query("page") ?? 1;
+    //     $size = $request->query("size") ?? 25;
+    //     $order = $request->query("order") ?? -1;
+
+    //     // Déterminer la colonne et l'ordre de tri en fonction de la valeur de $order
+    //     switch ($order) {
+    //         case 1:
+    //             $o_column = "created_at";
+    //             $o_order = "DESC";
+    //             break;
+    //         case 2:
+    //             $o_column = "created_at";
+    //             $o_order = "ASC";
+    //             break;
+    //         case 3:
+    //             $o_column = "regular_price";
+    //             $o_order = "ASC";
+    //             break;
+    //         case 4:
+    //             $o_column = "regular_price";
+    //             $o_order = "DESC";
+    //             break;
+    //         default:
+    //             $o_column = "id";
+    //             $o_order = "DESC";
+    //             break;
+    //     }
+
+    //     $brands = Brand::orderBy("titre", 'ASC')->get();
+    //     $q_brands = $request->query("brands");
+    //     $categories = Category::withCount('products')->orderBy('titre', 'ASC')->get();
+    //     $q_categories = $request->query("categories");
+
+    //     // Récupérer les valeurs du prix minimum et maximum à partir de la requête
+    //     $price_min = $request->query("price_min") ?? 0;
+    //     $price_max = $request->query("price_max") ?? 999999;
+
+    //     // Filtrer les produits en fonction des paramètres de requête
+    //     $product = Product::query()
+    //         ->when($q_brands, function ($query, $q_brands) {
+    //             return $query->whereIn('brand_id', explode(',', $q_brands))
+    //                 ->orWhereRaw("'" . $q_brands . "'=''");
+    //         })
+    //         ->when($q_categories, function ($query, $q_categories) {
+    //             return $query->whereIn('category_id', explode(',', $q_categories))
+    //                 ->orWhereRaw("'" . $q_categories . "'=''");
+    //         })
+    //         ->whereBetween('regular_price', [$price_min, $price_max])
+    //         ->orderBy('created_at', 'DESC')
+    //         ->orderBy($o_column, $o_order)
+    //         ->paginate($size);
+
+    //     $product->appends(request()->query());
+    //     $product->withQueryString();
+
+    //     return view('produit.index', [
+    //         'product' => $product,
+    //         'page' => $page,
+    //         'size' => $size,
+    //         'order' => $order,
+    //         'brands' => $brands,
+    //         'q_brands' => $q_brands,
+    //         'categories' => $categories,
+    //         'q_categories' => $q_categories,
+    //         'price_min' => $price_min,
+    //         'price_max' => $price_max,
+    //     ]);
+    // }
+
+    // public function show($slug)
+    // {
+    // $product = Product::where('slug', $slug)->first();
+    // $rproducts = Product::where('slug','!=', $slug)->inRandomOrder('id')->get()->take(4);
+    //  return view('produit.show',['product'=>$product,'rproducts'=>$rproducts]);
+    // }
+
+        $page = $request->query("page", 1);
+        $size = $request->query("size", 25);
+        $order = $request->query("order", -1);
 
         // Déterminer la colonne et l'ordre de tri en fonction de la valeur de $order
         switch ($order) {
@@ -126,11 +202,11 @@ class ProductController extends Controller
         $q_categories = $request->query("categories");
 
         // Récupérer les valeurs du prix minimum et maximum à partir de la requête
-        $price_min = $request->query("price_min") ?? 0;
-        $price_max = $request->query("price_max") ?? 999999;
+        $price_min = $request->query("price_min", 0);
+        $price_max = $request->query("price_max", 999999);
 
         // Filtrer les produits en fonction des paramètres de requête
-        $product = Product::query()
+        $products = Product::query()
             ->when($q_brands, function ($query, $q_brands) {
                 return $query->whereIn('brand_id', explode(',', $q_brands))
                     ->orWhereRaw("'" . $q_brands . "'=''");
@@ -144,11 +220,10 @@ class ProductController extends Controller
             ->orderBy($o_column, $o_order)
             ->paginate($size);
 
-        $product->appends(request()->query());
-        $product->withQueryString();
+        $products->appends(request()->query());
 
         return view('produit.index', [
-            'product' => $product,
+            'products' => $products,
             'page' => $page,
             'size' => $size,
             'order' => $order,
@@ -163,8 +238,11 @@ class ProductController extends Controller
 
     public function show($slug)
     {
-    $product = Product::where('slug', $slug)->first();
-    $rproducts = Product::where('slug','!=', $slug)->inRandomOrder('id')->get()->take(4);
-     return view('produit.show',['product'=>$product,'rproducts'=>$rproducts]);
+        $product = Product::where('slug', $slug)->first();
+        $rproducts = Product::where('slug', '!=', $slug)->inRandomOrder()->take(4)->get();
+
+        return view('produit.show', ['product' => $product, 'rproducts' => $rproducts]);
     }
+
+
 }

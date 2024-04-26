@@ -5,7 +5,7 @@
             <select class="form-select" id="pagesize" name="size">
                 <option value="25"{{ $size == 25 ? ' selected' : '' }}>25 Produits par page</option>
                 <option value="35"{{ $size == 35 ? ' selected' : '' }}>35 Produits par page</option>
-                <option value="52"{{ $size == 52 ? ' selected' : '' }}>52 Produits par page</option>
+                <option value="50"{{ $size == 50 ? ' selected' : '' }}>50 Produits par page</option>
                 <option value="100"{{ $size == 100 ? ' selected' : '' }}>100 Produits par page</option>
             </select>
         </div>
@@ -52,20 +52,24 @@
             </div>
         </div>
         <div class="d-flex flex-column flex-wrap flex-md-row justify-content-start align-items-center gap-2 ">
-            @foreach ($product as $products)
-            <a href="{{route('product.show', $products->slug)}}" class="" style="text-decoration:none; color:black">
-                <div class="tpn_card">
-                    <img src="assets/image_produit/{{$products->image}}" alt="">
-                    <h5>{{ Illuminate\Support\Str::of($products->titre)->words(3)}}</h5>
-                    <p><strong>{{$products->regular_price}} FCFA</strong></p>
-                     <a href="{{route('product.show', $products->slug)}}" class="btn tpn_btn btn-success color-dark" style="margin-top:-10px">Voir</a>
-                </div>
-            </a>
-            @endforeach
+        @php
+            $witems = Cart::instance('layouts.wishlist')->content()->pluck('id');
+        @endphp
+         @foreach ($products as $product)
+    <!-- Affichage de chaque produit -->
+    <a href="{{ route('product.show', $product->slug) }}" class="" style="text-decoration:none; color:black">
+        <div class="tpn_card">
+            <img src="assets/image_produit/{{ $product->image }}" alt="">
+            <h5>{{ Illuminate\Support\Str::of($product->titre)->words(3) }}</h5>
+            <p><strong>{{ $product->getPrice() }} FCFA</strong></p>
+            <a href="{{ route('product.show', $product->slug) }}" class="btn tpn_btn btn-success color-dark" style="margin-top:-10px">Voir</a>
+
         </div>
+    </a>
+@endforeach
+{{ $products->withQueryString()->links() }}
     </div>
     <div>
-    {{ $product->withQueryString()->links() }}
     </div>
     <form id="formfilter" method="GET">
         <input type="hidden" name="page" id="page" value="{{$page}}"/>
@@ -77,7 +81,6 @@
         <input type="hidden" name="price_max" id="price_max" value="{{$price_max}}"/>
     </form>
 @endsection
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css">
@@ -135,6 +138,39 @@
         $('#orderby').on("change", function () {
             $("#order").val($(this).val()); // Modifier le sélecteur pour récupérer la valeur de #orderby
             $("#formfilter").submit();
+        });
+    });
+
+
+
+
+
+    $(document).ready(function() {
+        $('.addToWishlistBtn').on('click', function() {
+            var product_id = $(this).data('id');
+            var product_titre = $(this).data('titre');
+            var product_regular_price = $(this).data('regular_price');
+
+            $.ajax({
+                url: '{{ route('wishlist.store') }}',
+                type: 'POST',
+                data: {
+                    product_id: product_id,
+                    product_titre: product_titre,
+                    product_regular_price: product_regular_price,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if (response.status === 'success') {
+                        alert(response.message);
+                    } else {
+                        alert('Une erreur s\'est produite. Veuillez réessayer.');
+                    }
+                },
+                error: function() {
+                    alert('Une erreur s\'est produite. Veuillez réessayer.');
+                }
+            });
         });
     });
 </script>

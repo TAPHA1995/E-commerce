@@ -19,13 +19,10 @@ class ProductController extends Controller
 {
     // Autres méthodes...
 
-    public function addProductTowishlist(Request $request)
+    public function addProductTowishlist($productId, $productTitre,$productPrice)
     {
-        $productId = $request->input('product_id');
-        $productTitre = $request->input('product_titre');
-        $productPrice = $request->input('product_regular_price');
 
-        Cart::instance('layouts.wishlist')->add($productId, $productTitre, 1, $productPrice);
+        Cart::instance('layouts.wishlist')->add($productId, $productTitre, 1, $productPrice)->associate("App\Models\Product");
 
         return response()->json(['status' => 'success', 'message' => 'Le produit a été ajouté à la liste de souhaits.']);
     }
