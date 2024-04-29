@@ -60,6 +60,14 @@ border-bottom-right-radius: 16px;
                         <img
                         src="assets/image_produit/{{$product->model->image}}"
                           class="img-fluid rounded-3" alt="Cotton T-shirt">
+                          <input type="text" id="" class="form-control form-control-lg mb-2 text-dark" style='height:3vh' value="@foreach ($cartItems as $product)
+                          {{$product->model->image}},
+                          {{$product->model->titre}},
+                          {{$product->model->subtitle}},
+                          {{$product->model->id}}
+                          @endforeach
+                          "/>
+
                       </div>
                       <div class="col-md-3 col-lg-3 col-xl-3">
                         <h6 class="text-muted">{{$product->model->titre}}</h6>
@@ -93,19 +101,21 @@ border-bottom-right-radius: 16px;
                   </div>
                 </div>
                 <div class="col-lg-4 bg-grey">
-                <form class="" action="#" method="POST">
+                <form class="" action="{{route('order.store')}}" method="POST">
                 @csrf
                   <div class="p-5">
                     <h3 class="fw-bold mb-5 mt-2 pt-1">Summary</h3>
                     <hr class="my-4">
                     <div class="d-flex justify-content-between mb-4">
                     <h6 class="text-uppercase"><span>{{ Cart::instance('cart.index')->content()->count() }}</span>  article @if (Cart::instance('cart.index')->content()->count() > 1) <span style="margin-left:-3px">s</span> @endif</h6>
+                    <input type="text" id="" class="form-control form-control-lg mb-2" name="nbr_article" style='height:3vh' value="{{ Cart::instance('cart.index')->content()->count() }} article"/>
                       <h5>{{Cart::instance('cart.index')->subtotal()}} Cfa</h5>
+                      <input type="text" id="" name="subtotal" class="form-control form-control-lg mb-2" style='height:3vh' value="{{Cart::instance('cart.index')->subtotal()}} Cfa"/>
                     </div>
                     <h5 class="text-uppercase mb-3">Livraison</h5>
                     @if ($cartItems->count() > 0)
                         <div style="display: flex; gap:10px: flex-wrap:wrap ">
-                            <div class="mb-4 pb-2 livraisonDK">
+                            <div class="mb-4 pb-2 livraisonDK livraisonDiv" id="monDiv">
                                 <div class="btn tbnlvrDK">Dakar +2000 Cfa</div>
                             </div>
                         @php
@@ -155,11 +165,10 @@ border-bottom-right-radius: 16px;
                     <h5 class="text-uppercase mb-3">Coordonnées</h5>
                     <div class="mb-5">
                       <div class="form-outline">
-                        <input type="text" id="form3Examplea2" class="form-control form-control-lg mb-2" style='height:3vh' placeholder='Numéro Téléphone 1'/>
-                        <input type="text" id="form3Examplea2" class="form-control form-control-lg mb-2" style='height:3vh'placeholder='Numéro Téléphone 2' />
-                        <input type="email" id="form3Examplea2" class="form-control form-control-lg mb-2" style='height:3vh' placeholder='Email'/>
-                        <input type="text" id="form3Examplea2" class="form-control form-control-lg mb-2" style='height:3vh' placeholder='Adresse de la livraison '/>
-                        
+                        <input type="text" id="" name="telephone1" class="form-control form-control-lg mb-2" style='height:3vh' placeholder='Numéro Téléphone 1' required/>
+                        <input type="text" id="" name="telephone2" class="form-control form-control-lg mb-2" style='height:3vh'placeholder='Numéro Téléphone 2' />
+                        <input type="email" id="" name="email" class="form-control form-control-lg mb-2" style='height:3vh' placeholder='Email'/>
+                        <input type="text" id="" name="Adresse_domicile" class="form-control form-control-lg mb-2" style='height:3vh' placeholder='Adresse de la livraison ' required/>
                       </div>
                     </div>
                     <hr class="my-4">
@@ -188,8 +197,6 @@ border-bottom-right-radius: 16px;
                             $currentSubtotalGD = (float) str_replace(',', '', Cart::instance('cart.index')->subtotal());
                             @endphp
                             @if ($currentSubtotalGD == $SommelivraisaonDK)
-                                @php
-                                @endphp
                                 @else
                                @php
 
@@ -198,10 +205,10 @@ border-bottom-right-radius: 16px;
                             @php
                                 echo $SommelivraisaonDK;
                             @endphp
-                             <input type="text" id="form3Examplea2" class="form-control form-control-lg mb-2" value="{{$SommelivraisaonDK}}"  />
-                            Cfa
+                             <input type="text" id="" class="form-control form-control-lg mb-2" name="montant_total" value="{{$SommelivraisaonDK}}:Livraison Dakar"  />
+                            Cfa1
                         </h5>
-                        <h5 class="sommeTotalHDK" id="sommeTotalHDK">
+                        <h5 class="sommeTotalHDK livraisonDiv" id="sommeTotalHDK monDivOrDK">
 
                             @if ( $product->model->livraisonOrDK == 'Non disponible')
                             <div class="alert alert-danger">livraison hors Dakar non disponible</div>
@@ -209,10 +216,9 @@ border-bottom-right-radius: 16px;
                             @php
                             $currentSubtotal = (float) str_replace(',', '', Cart::instance('cart.index')->subtotal());
                             echo $currentSubtotal + $product->model->livraisonOrDK;
-                            
                             @endphp
-                            <input type="text" id="form3Examplea2" class="form-control form-control-lg mb-2" value="{{$currentSubtotal + $product->model->livraisonOrDK}}"  />
-                            Cfa
+                            <input type="text" id="" class="form-control form-control-lg mb-2" name="montant_total" value="{{$currentSubtotal + $product->model->livraisonOrDK}}:Livraison hors Dakar"/>
+                            Cfa2
                             @endif
                         </h5>
                         <h5 class="sommeTotalG" id="sommeTotalG">
@@ -220,13 +226,13 @@ border-bottom-right-radius: 16px;
                             $currentSubtotal = (float) str_replace(',', '', Cart::instance('cart.index')->subtotal());
                             echo $currentSubtotal;
                             @endphp
-                            <input type="text" id="form3Examplea2" class="form-control form-control-lg mb-2" value="{{$currentSubtotal}}"  />
-                            Cfa
+                            <input type="text" id="monInput" class="form-control form-control-lg mb-2" name="montant_total" value="@php echo $currentSubtotal @endphp"/>
+                            Cfa3
                         </h5>
-                        <h5>
-
-                       </h5>
                       @endif
+                      {{-- <div id="monDiv">Cliquez ici pour changer la valeur</div>
+                      <input type="text" id="monInput" value="Valeur initiale"> --}}
+
                     </div>
                     <button type="submit" class="btn btn-dark btn-block btn-lg"
                       data-mdb-ripple-color="dark">Payer à la livraison</button>
@@ -240,7 +246,7 @@ border-bottom-right-radius: 16px;
       </div>
     </div>
   </section>
- 
+
   <style>
     .sommeTotalDK{
         display: none;
@@ -311,11 +317,72 @@ border-bottom-right-radius: 16px;
       @csrf
       @method('delete')
   </form>
-  
+
 
 
   <script>
-  
+
+// // Sélectionnez le div par son ID
+// var monDivOrDK = document.getElementById("monDivOrDK");
+// // Sélectionnez l'input par son ID
+// var monInput = document.getElementById("monInput");
+// // Sélectionnez le div par son ID
+// var monDiv = document.getElementById("monDiv");
+// // Sélectionnez l'input par son ID
+// var monInput = document.getElementById("monInput");
+
+// // Ajoutez un gestionnaire d'événements pour le clic sur le div
+// monDiv.addEventListener("click", function() {
+//     // Obtenez la valeur actuelle de l'input et convertissez-la en nombre
+//     var inputValue = parseFloat(monInput.value);
+//     // Effectuez l'opération 2000 + la valeur de l'input
+//     var resultat = 500 + inputValue + ': Livraison Dakar';
+//     // Mettez à jour la valeur de l'input avec le résultat de l'opération
+//     monInput.value = resultat;
+// });
+
+
+
+// // Ajoutez un gestionnaire d'événements pour le clic sur le div
+// monDiv.addEventListener("click", function() {
+//     // Obtenez la valeur actuelle de l'input et convertissez-la en nombre
+//     var inputValue = parseFloat(monInput.value);
+//     // Effectuez l'opération 2000 + la valeur de l'input
+//     var resultat = 1000 + inputValue + ': Livraison hors dakar';
+//     // Mettez à jour la valeur de l'input avec le résultat de l'opération
+//     monInput.value = resultat;
+// });
+
+
+
+// Sélectionnez tous les divs par leur classe
+var divs = document.querySelectorAll(".livraisonDiv");
+
+// Sélectionnez l'input par son ID
+var monInput = document.getElementById("monInput");
+
+// Ajoutez un gestionnaire d'événements pour chaque div
+divs.forEach(function(div) {
+    div.addEventListener("click", function() {
+        // Obtenez la valeur actuelle de l'input et convertissez-la en nombre
+        var inputValue = parseFloat(monInput.value);
+        // Effectuez l'opération en fonction de la classe du div cliqué
+        var resultat;
+        if (div.classList.contains("livraisonDK")) {
+            resultat = 500 + inputValue + ': Livraison Dakar';
+        } else if (div.classList.contains("livraisonHDK")) {
+            resultat = 1000 + inputValue + ': Livraison hors Dakar';
+        }
+        // Mettez à jour la valeur de l'input avec le résultat de l'opération
+        monInput.value = resultat;
+    });
+});
+
+
+
+
+
+
   //modifier la quantité dans le panier
     function updateQuantity(qty)
     {
@@ -335,22 +402,35 @@ function clearCart()
     {
         $('#clearCart').submit();
     }
-      optionLivraisonDK = document.querySelector(".livraisonDK");
-      optionLivraisonDK.onclick = function(){
-      affichlvrDK = document.querySelector(".sommeTotalDK");
-      affichlvrDK.classList.add("active");
-      affichlvrHDK = document.querySelector(".sommeTotalHDK");
-      affichlvrHDK.classList.remove("active");
-      affichlvrG = document.querySelector(".sommeTotalG");
-      affichlvrG.classList.remove("active");
-      focuslvrDK = document.querySelector(".tbnlvrDK");
-      focuslvrDK.classList.add("active");
-      focuslvrHDK = document.querySelector(".tbnlvrHDK");
-      focuslvrHDK.classList.remove("active");
-      focuslvrG = document.querySelector(".tbnlvrG");
-      focuslvrG.classList.remove("active");
 
-      };
+    document.addEventListener('DOMContentLoaded', function() {
+    let inputElement = document.getElementById("form3Examplea2");
+
+    optionLivraisonDK = document.querySelector(".livraisonDK");
+    optionLivraisonDK.onclick = function sommeTotal() {
+    affichlvrDK = document.querySelector(".sommeTotalDK");
+    affichlvrDK.classList.add("active");
+    affichlvrHDK = document.querySelector(".sommeTotalHDK");
+    affichlvrHDK.classList.remove("active");
+    affichlvrG = document.querySelector(".sommeTotalG");
+    affichlvrG.classList.remove("active");
+    focuslvrDK = document.querySelector(".tbnlvrDK");
+    focuslvrDK.classList.add("active");
+    focuslvrHDK = document.querySelector(".tbnlvrHDK");
+    focuslvrHDK.classList.remove("active");
+    focuslvrG = document.querySelector(".tbnlvrG");
+    focuslvrG.classList.remove("active");
+
+    // Vérifier si la classe 'active' est présente sur l'élément affichlvrDK
+    if (sommeTotal) {
+        // Effectuer l'opération 1 + 1 sur la valeur actuelle de l'input
+        let newValue = parseInt(inputElement.value) + 2000 + ':Livraison Dakar';
+
+        // Mettre à jour la valeur de l'input avec le résultat de l'opération
+        inputElement.value = newValue;
+    }
+   };
+});
 
       optionLivraisonHDK = document.querySelector(".livraisonHDK");
       optionLivraisonHDK.onclick = function(){
@@ -387,6 +467,6 @@ function clearCart()
       };
 
   </script>
-  
+
 
 @endsection

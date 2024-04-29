@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CardController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\WishlistController;
 use Gloudemans\Shoppingcart\Facades\Cart;
@@ -32,7 +33,7 @@ Route::delete('/cart/viderPanier',[CardController::class, 'clearCart'])->name('c
 //AJOUTER AU FAVORIE
 // Route::post('/wishlist/add',[WishlistController::class, 'addProductTowishlist'])->name('wishlist.store');
 Route::post('/wishlist/add', [WishlistController::class, 'addProductTowishlistt'])->name('wishlist.store');
-
+Route::post('/order', [OrderController::class, 'store'])->name('order.store');
 //Middleware
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->Middleware('Admin');
 

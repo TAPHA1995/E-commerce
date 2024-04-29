@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\order;
 use App\Models\Product;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
@@ -70,6 +71,7 @@ class CardController extends Controller
         Cart::instance('cart.index')->destroy();
         return redirect()->back();
     }
+
 
 
 }
