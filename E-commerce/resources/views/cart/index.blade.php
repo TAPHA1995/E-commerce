@@ -140,8 +140,8 @@ border-bottom-right-radius: 16px;
                             @endif
                             @endforeach
                         @if ($nbProduitslvrGratuit == $cartItems->count() && $nbProduitsNonDisponibles == $cartItems->count())
-                        <div class="mb-4 pb-2 livraisonG">
-                            <div class="btn tbnlvrG alert alert-success">La livraison est gratuit pour cette commande</div>
+                        <div class="mb-4 pb-2 livraisonG livraisonDiv">
+                            <div class="btn tbnlvrG alert alert-success">Livraison gratuite</div>
                         </div>
                         @endif
                         @if ($nbProduitslvrGratuit == $cartItems->count() && $nbProduitsNonDisponibles > 0)
@@ -151,13 +151,13 @@ border-bottom-right-radius: 16px;
                         @endif
 
                         @if ($nbProduitslvrGratuit == $cartItems->count() && $nbProduitsNonDisponibles == 0)
-                        <div class="mb-4 pb-2 livraisonHDK">
-                            <div class="btn tbnlvrHDK">Hors Dakar +2500 Cfa</div>
+                        <div class="mb-4 pb-2 livraisonHDK livraisonDiv">
+                            <div class="btn tbnlvrHDK">Hors Dakar +2000 Cfa</div>
                         </div>
                         @endif
                         @if ($nbProduitsNonDisponibles == 0)
-                        <div class="mb-4 pb-2 livraisonHDK">
-                            <div class="btn tbnlvrHDK">Hors Dakar +2500 Cfa</div>
+                        <div class="mb-4 pb-2 livraisonHDK livraisonDiv">
+                            <div class="btn tbnlvrHDK ">Hors Dakar +2000 Cfa</div>
                         </div>
                         @endif
                         </div>
@@ -205,10 +205,10 @@ border-bottom-right-radius: 16px;
                             @php
                                 echo $SommelivraisaonDK;
                             @endphp
-                             <input type="text" id="" class="form-control form-control-lg mb-2" name="montant_total" value="{{$SommelivraisaonDK}}:Livraison Dakar"  />
+                             <input type="text" id="" class="form-control form-control-lg mb-2" name="" value="{{$SommelivraisaonDK}}:Livraison Dakar"  />
                             Cfa1
                         </h5>
-                        <h5 class="sommeTotalHDK livraisonDiv" id="sommeTotalHDK monDivOrDK">
+                        <h5 class="sommeTotalHDK " id="sommeTotalHDK monDivOrDK">
 
                             @if ( $product->model->livraisonOrDK == 'Non disponible')
                             <div class="alert alert-danger">livraison hors Dakar non disponible</div>
@@ -217,7 +217,7 @@ border-bottom-right-radius: 16px;
                             $currentSubtotal = (float) str_replace(',', '', Cart::instance('cart.index')->subtotal());
                             echo $currentSubtotal + $product->model->livraisonOrDK;
                             @endphp
-                            <input type="text" id="" class="form-control form-control-lg mb-2" name="montant_total" value="{{$currentSubtotal + $product->model->livraisonOrDK}}:Livraison hors Dakar"/>
+                            <input type="text" id="" class="form-control form-control-lg mb-2" name="" value="{{$currentSubtotal + $product->model->livraisonOrDK}}:Livraison hors Dakar"/>
                             Cfa2
                             @endif
                         </h5>
@@ -226,7 +226,7 @@ border-bottom-right-radius: 16px;
                             $currentSubtotal = (float) str_replace(',', '', Cart::instance('cart.index')->subtotal());
                             echo $currentSubtotal;
                             @endphp
-                            <input type="text" id="monInput" class="form-control form-control-lg mb-2" name="montant_total" value="@php echo $currentSubtotal @endphp"/>
+                            <input type="text" id="monInput" class="form-control form-control-lg mb-2" name="montant_total" value="{{$currentSubtotal}}"/>
                             Cfa3
                         </h5>
                       @endif
@@ -364,19 +364,21 @@ var monInput = document.getElementById("monInput");
 // Ajoutez un gestionnaire d'événements pour chaque div
 divs.forEach(function(div) {
     div.addEventListener("click", function() {
-        // Obtenez la valeur actuelle de l'input et convertissez-la en nombre
-        var inputValue = parseFloat(monInput.value);
         // Effectuez l'opération en fonction de la classe du div cliqué
         var resultat;
         if (div.classList.contains("livraisonDK")) {
-            resultat = 500 + inputValue + ': Livraison Dakar';
+            resultat = 'subtotal + 1500: Livraison Dakar';
         } else if (div.classList.contains("livraisonHDK")) {
-            resultat = 1000 + inputValue + ': Livraison hors Dakar';
+            resultat = 'subtotal + 2000: Livraison hors Dakar';
+        } else if (div.classList.contains("livraisonG")) {
+            resultat = 'subtotal: Livraison Dakar gratuite';
         }
         // Mettez à jour la valeur de l'input avec le résultat de l'opération
         monInput.value = resultat;
     });
 });
+
+
 
 
 
