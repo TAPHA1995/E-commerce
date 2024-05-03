@@ -60,14 +60,6 @@ border-bottom-right-radius: 16px;
                         <img
                         src="assets/image_produit/{{$product->model->image}}"
                           class="img-fluid rounded-3" alt="Cotton T-shirt">
-                          <input type="text" id="" class="form-control form-control-lg mb-2 text-dark" style='height:3vh' value="@foreach ($cartItems as $product)
-                          {{$product->model->image}},
-                          {{$product->model->titre}},
-                          {{$product->model->subtitle}},
-                          {{$product->model->id}}
-                          @endforeach
-                          "/>
-
                       </div>
                       <div class="col-md-3 col-lg-3 col-xl-3">
                         <h6 class="text-muted">{{$product->model->titre}}</h6>
@@ -108,15 +100,15 @@ border-bottom-right-radius: 16px;
                     <hr class="my-4">
                     <div class="d-flex justify-content-between mb-4">
                     <h6 class="text-uppercase"><span>{{ Cart::instance('cart.index')->content()->count() }}</span>  article @if (Cart::instance('cart.index')->content()->count() > 1) <span style="margin-left:-3px">s</span> @endif</h6>
-                    <input type="text" id="" class="form-control form-control-lg mb-2" name="nbr_article" style='height:3vh' value="{{ Cart::instance('cart.index')->content()->count() }} article"/>
+                    <input type="hidden" id="" class="form-control form-control-lg mb-2" name="nbr_article" style='height:3vh' value="{{ Cart::instance('cart.index')->content()->count() }} article"/>
                       <h5>{{Cart::instance('cart.index')->subtotal()}} Cfa</h5>
-                      <input type="text" id="" name="subtotal" class="form-control form-control-lg mb-2" style='height:3vh' value="{{Cart::instance('cart.index')->subtotal()}} Cfa"/>
+                      <input type="hidden" id="" name="subtotal" class="form-control form-control-lg mb-2" style='height:3vh' value="{{Cart::instance('cart.index')->subtotal()}} Cfa"/>
                     </div>
                     <h5 class="text-uppercase mb-3">Livraison</h5>
                     @if ($cartItems->count() > 0)
                         <div style="display: flex; gap:10px: flex-wrap:wrap ">
                             <div class="mb-4 pb-2 livraisonDK livraisonDiv" id="monDiv">
-                                <div class="btn tbnlvrDK">Dakar +2000 Cfa</div>
+                                <div class="btn tbnlvrDK">Dakar +1500 Cfa</div>
                             </div>
                         @php
                             $nbProduitsNonDisponibles = 0;
@@ -205,8 +197,8 @@ border-bottom-right-radius: 16px;
                             @php
                                 echo $SommelivraisaonDK;
                             @endphp
-                             <input type="text" id="" class="form-control form-control-lg mb-2" name="" value="{{$SommelivraisaonDK}}:Livraison Dakar"  />
-                            Cfa1
+                             <input type="hidden" id="" class="form-control form-control-lg mb-2" name="" value="{{$SommelivraisaonDK}}:Livraison Dakar"  />
+                            Cfa
                         </h5>
                         <h5 class="sommeTotalHDK " id="sommeTotalHDK monDivOrDK">
 
@@ -217,8 +209,8 @@ border-bottom-right-radius: 16px;
                             $currentSubtotal = (float) str_replace(',', '', Cart::instance('cart.index')->subtotal());
                             echo $currentSubtotal + $product->model->livraisonOrDK;
                             @endphp
-                            <input type="text" id="" class="form-control form-control-lg mb-2" name="" value="{{$currentSubtotal + $product->model->livraisonOrDK}}:Livraison hors Dakar"/>
-                            Cfa2
+                            <input type="hidden" id="" class="form-control form-control-lg mb-2" name="" value="{{$currentSubtotal + $product->model->livraisonOrDK}}:Livraison hors Dakar"/>
+                            Cfa
                             @endif
                         </h5>
                         <h5 class="sommeTotalG" id="sommeTotalG">
@@ -226,13 +218,10 @@ border-bottom-right-radius: 16px;
                             $currentSubtotal = (float) str_replace(',', '', Cart::instance('cart.index')->subtotal());
                             echo $currentSubtotal;
                             @endphp
-                            <input type="text" id="monInput" class="form-control form-control-lg mb-2" name="montant_total" value="{{$currentSubtotal}}"/>
-                            Cfa3
+                            <input type="hidden" id="monInput" class="form-control form-control-lg mb-2" name="montant_total" value="{{$currentSubtotal}}"/>
+                            Cfa
                         </h5>
                       @endif
-                      {{-- <div id="monDiv">Cliquez ici pour changer la valeur</div>
-                      <input type="text" id="monInput" value="Valeur initiale"> --}}
-
                     </div>
                     <button type="submit" class="btn btn-dark btn-block btn-lg"
                       data-mdb-ripple-color="dark">Payer à la livraison</button>

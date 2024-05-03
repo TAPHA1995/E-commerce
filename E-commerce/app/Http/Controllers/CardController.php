@@ -12,8 +12,10 @@ class CardController extends Controller
     public function index()
     {
         $cartItems = Cart::instance('cart.index')->content();
+
         return view('cart.index', ['cartItems'=>$cartItems]);
     }
+
 
     // public function addCart(Request $request)
     // {
@@ -39,6 +41,7 @@ class CardController extends Controller
     {
         return $cartItem->id == $request->product_id;
     });
+
 
     if ($duplicata->isNotEmpty()) {
         return redirect('/')->with('success', 'Le produit a déjà été ajouté.');
