@@ -223,8 +223,8 @@ border-bottom-right-radius: 16px;
                         </h5>
                       @endif
                     </div>
-                    <button type="submit" class="btn btn-dark btn-block btn-lg"
-                      data-mdb-ripple-color="dark">Payer à la livraison</button>
+                    <button type="submit" class="btn btn-dark btn-block btn-lg PAYER"
+                      data-mdb-ripple-color="dark" id="PAYER">Payer à la livraison</button>
                   </div>
                 </form>
                 </div>
@@ -242,9 +242,15 @@ border-bottom-right-radius: 16px;
     }
     .sommeTotalDK.active{
         display: flex;
-
-
     }
+
+    .PAYER{
+        display: none;
+    }
+    .PAYER.active{
+        display: flex;
+    }
+
     .sommeTotalHDK{
         display: none;
     }
@@ -401,6 +407,8 @@ function clearCart()
     optionLivraisonDK.onclick = function sommeTotal() {
     affichlvrDK = document.querySelector(".sommeTotalDK");
     affichlvrDK.classList.add("active");
+    affichlvrDK = document.querySelector(".PAYER");
+    affichlvrDK.classList.add("active");
     affichlvrHDK = document.querySelector(".sommeTotalHDK");
     affichlvrHDK.classList.remove("active");
     affichlvrG = document.querySelector(".sommeTotalG");
@@ -427,6 +435,8 @@ function clearCart()
       optionLivraisonHDK.onclick = function(){
       affichlvrHDK = document.querySelector(".sommeTotalHDK");
       affichlvrHDK.classList.add("active");
+      affichlvrDK = document.querySelector(".PAYER");
+      affichlvrDK.classList.add("active");
       affichlvrDK = document.querySelector(".sommeTotalDK");
       affichlvrDK.classList.remove("active");
       affichlvrG = document.querySelector(".sommeTotalG");
@@ -444,6 +454,8 @@ function clearCart()
       optionLivraisonG.onclick = function(){
       affichlvrG = document.querySelector(".sommeTotalG");
       affichlvrG.classList.add("active");
+      affichlvrDK = document.querySelector(".PAYER");
+      affichlvrDK.classList.add("active");
       affichlvrDK = document.querySelector(".sommeTotalDK");
       affichlvrDK.classList.remove("active");
       affichlvrHDK = document.querySelector(".sommeTotalHDK");
