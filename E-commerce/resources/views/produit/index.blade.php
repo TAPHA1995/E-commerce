@@ -51,21 +51,34 @@
                 <input type="text" id="priceRangeSlider" name="priceRange" />
             </div>
         </div>
-        <div class="d-flex flex-column flex-wrap flex-md-row justify-content-start align-items-center gap-2 ">
+        <div class="d-flex flex-column flex-wrap flex-md-row justify-content-start align-items-center gap-4 ">
         @php
             $witems = Cart::instance('layouts.wishlist')->content()->pluck('id');
         @endphp
          @foreach ($products as $product)
     <!-- Affichage de chaque produit -->
-    <a href="{{ route('product.show', $product->slug) }}" class="" style="text-decoration:none; color:black">
-        <div class="tpn_card">
-            <img src="assets/image_produit/{{ $product->image }}" alt="">
-            <h5>{{ Illuminate\Support\Str::of($product->titre)->words(3) }}</h5>
-            <p><strong>{{ $product->getPrice() }} FCFA</strong></p>
-            <a href="{{ route('product.show', $product->slug) }}" class="btn tpn_btn btn-success color-dark" style="margin-top:-10px">Voir</a>
 
+        <div class="tpn_card">
+            <a href="{{ route('product.show', $product->slug) }}" class="" style="text-decoration:none; color:black">
+                <img src="assets/image_produit/{{ $product->image }}" alt="">
+                <h5>{{ Illuminate\Support\Str::of($product->titre)->words(3) }}</h5>
+                <p><strong>{{ $product->getPrice() }} FCFA</strong></p>
+            </a>
+            <div class="wishlists">
+                @if (!empty(Auth::check()))
+                <a href="#" class="wishlist heartwishlist add_to_wishlist" title="wishlist" id="{{$product->id}}" style="margin-top:-10px">
+                    <i class="fa fa-heart"></i>
+                  </a>
+                @else
+                <a href="{{ route('login') }}" class="wishlist" style="margin-top:-10px">
+                    <i class="fa fa-heart"></i>
+                </a>
+                @endif
+                <a href="{{ route('product.show', $product->slug) }}" class="wishlist" style="margin-top:-10px; text-decoration:none;">
+                <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                </a>
+            </div>
         </div>
-    </a>
 @endforeach
 {{ $products->withQueryString()->links() }}
     </div>
@@ -81,9 +94,11 @@
         <input type="hidden" name="price_max" id="price_max" value="{{$price_max}}"/>
     </form>
 @endsection
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+{{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> --}}
+{{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script> --}}
+{{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css"> --}}
 
 <script>
     function filterproductsByBrands() {
@@ -103,6 +118,7 @@
     }
 
     $(document).ready(function () {
+
         // Récupérer les valeurs de prix min et max depuis les paramètres de requête
         var price_min = parseInt("{{$price_min}}");
         var price_max = parseInt("{{$price_max}}");
@@ -146,31 +162,71 @@
 
 
     $(document).ready(function() {
-        $('.addToWishlistBtn').on('click', function() {
-            var product_id = $(this).data('id');
-            var product_titre = $(this).data('titre');
-            var product_regular_price = $(this).data('regular_price');
 
-            $.ajax({
-                url: '{{ route('wishlist.store') }}',
-                type: 'POST',
-                data: {
-                    product_id: product_id,
-                    product_titre: product_titre,
-                    product_regular_price: product_regular_price,
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    if (response.status === 'success') {
-                        alert(response.message);
-                    } else {
-                        alert('Une erreur s\'est produite. Veuillez réessayer.');
-                    }
-                },
-                error: function() {
-                    alert('Une erreur s\'est produite. Veuillez réessayer.');
-                }
-            });
-        });
+    $('.add_to_wishlist').click(function(e) {
+    e.preventDefault(); // Empêche le comportement par défaut du lien
+
+    var product_id = $(this).attr('id');
+
+    $.ajax({
+      url: '{{ route('add_to_wishlist.store') }}', // Remplacez par votre route réelle pour ajouter à la liste de souhaits
+      type: 'POST',
+      data: {
+        product_id: product_id,
+        _token: '{{ csrf_token() }}' // Ajouter le token CSRF pour la sécurité
+      },
+     dataType: "json",
+     success: function(data){
+
+     }
     });
+  });
+
+
+
+        // $('.addToWishlistBtn').on('click', function() {
+        //     var product_id = $(this).data('id');
+        //     var product_titre = $(this).data('titre');
+        //     var product_regular_price = $(this).data('regular_price');
+
+        //     $.ajax({
+                // url: '{{ route('wishlist.store') }}',
+        //         type: 'POST',
+        //         data: {
+        //             product_id: product_id,
+        //             product_titre: product_titre,
+        //             product_regular_price: product_regular_price,
+        //             _token: '{{ csrf_token() }}'
+        //         },
+        //         success: function(response) {
+        //             if (response.status === 'success') {
+        //                 alert(response.message);
+        //             } else {
+        //                 alert('Une erreur s\'est produite. Veuillez réessayer.');
+        //             }
+        //         },
+        //         error: function() {
+        //             alert('Une erreur s\'est produite. Veuillez réessayer.');
+        //         }
+        //     });
+        // });
+
+
+    //     $('body').delegate('add_to_wishlist', 'click', function(e){
+    //     var product_id = $(this).attr('id');
+    //     $.ajax({
+    //         type: "POST",
+    //         url:"{{url('add_to_wishlist')}}",
+    //         data:{
+    //             "_token": "{{csrf_token()}}",
+    //             product_id:product_id,
+    //         },
+    //         dataType : "json",
+    //         success:function(data){
+    //         }
+    //     });
+    // });
+    });
+
+
 </script>

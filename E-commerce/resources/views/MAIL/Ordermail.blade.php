@@ -7,7 +7,7 @@
     <title>Order E-mail</title>
 </head>
 <body>
-<p>Bonjour {{$order->nom}}</p>
+<p>Bonjour </p>
 <p>votre commande est acception avec succes</p>
 <table style="width: 600px; text-align:right">
     <thead>
@@ -19,23 +19,31 @@
         </tr>
     </thead>
     <tbody>
-        @foreach ($order->orderItems as $item)
+        @foreach ($mailData['order']->products as $product)
         <tr>
             <td><img
-                src="assets/image_produit/{{$item->product->image}}"
+                src="assets/image_produit/{{$product->product->image}}"
                   class="img-fluid rounded-3" alt="Cotton T-shirt">
             </td>
-            <td>{{$item->quantity}}</td>
-            <td>{{$item->price * $item->quantity}} Cfa</td>
+            <td>{{$product->quantity}}</td>
+            <td>{{$product->price * $product->quantity}} Cfa</td>
         </tr>
         @endforeach
         <tr>
             <td colspan="3"></td>
-            <td>Sous total : {{$order->subtotal}} Cfa</td>
+            <td>Sous total : {{$mailData['order']->subtotal}} Cfa</td>
         </tr>
         <tr>
             <td colspan="3"></td>
-            <td>Total : {{$order->subtotal + 1000}} Cfa</td>
+            <?php
+
+        $subtotal = (float) $mailData['order']->subtotal; // Convertit la valeur en nombre
+
+        $total = $subtotal + 1000;
+
+        ?>
+
+        <td>Total : {{ $total }} Cfa</td>
         </tr>
     </tbody>
 </table>

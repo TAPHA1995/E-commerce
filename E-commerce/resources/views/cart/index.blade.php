@@ -93,7 +93,8 @@ border-bottom-right-radius: 16px;
                   </div>
                 </div>
                 <div class="col-lg-4 bg-grey">
-                <form class="" action="{{route('order.store')}}" method="POST">
+
+                <form class="" action="{{ route('order.store') }}" method="POST">
                 @csrf
                   <div class="p-5">
                     <h3 class="fw-bold mb-5 mt-2 pt-1">Summary</h3>

@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Product;
 
 class order extends Model
 {
@@ -15,6 +17,8 @@ class order extends Model
 
    public function products()
     {
-        return $this->belongsToMany('App\Product')->withPivot('quantity');
+        // return $this->belongsToMany('App\Product')->withPivot('quantity');
+        return $this->hasMany(order_product::class);
     }
+
 }
